@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" href="img/logomarket5.png" type="image/png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerifiOS Market - Cuenca</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }
+        @media (max-width: 640px) {
+    /* Forzar que las tarjetas en modo lista se apilen verticalmente en celulares */
+    #productos-grid.flex-col > div {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 12px !important;
+        gap: 12px !important;
+    }
+    #productos-grid.flex-col > div > div:first-child {
+        width: 100% !important;
+        height: auto !important;
+    }
+    #productos-grid.flex-col > div > div:first-child img {
+        height: 160px !important;
+        width: 100% !important;
+    }
+    #productos-grid.flex-col > div > div:last-child {
+        width: 100% !important;
+        justify-content: space-between !important;
+        border-top: 1px solid #f1f5f9 !important;
+        padding-top: 8px !important;
+    }
+}
+    </style>
+
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col font-sans text-slate-800 relative">
+
+    <!-- Header Elegante y Moderno con efecto Scroll -->
+    <header id="main-header" class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-xs transition-transform duration-300">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
+            
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 flex items-center justify-center bg-blue-50 rounded-xl border border-blue-100 p-1 shadow-xs">
+                    <img src="img/logomarket5.png" alt="VerifiOS Market Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-slate-900">VerifiOS<span class="text-blue-600"> Market</span></h1>
+                    <p class="text-[11px] text-slate-500 font-medium"> Marketplace Libre Cuenca Ecuador.📍</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                <div class="relative w-full sm:w-72">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
+                    <input type="text" id="buscador" placeholder="Buscar productos o servicios..." class="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-100/70 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                </div>
+                <a href="publicar.html" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm shadow-blue-500/20 whitespace-nowrap flex items-center gap-1.5">
+                    <span>+</span> Publicar Gratis 📝
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- Contenido Principal -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+ 
+        <!-- Banner Principal Mejorado -->
+        <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white mb-8 shadow-lg shadow-blue-500/10 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="relative z-10">
+
+       <!-- Botón de instalar PWA (inicialmente oculto) -->
+<button id="btnInstalar" style="display: none;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-xl transition shadow-sm items-center gap-1.5">
+    📲 Instalar App
+</button>
+
+                <span class="bg-white/20 text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">Compra y Vende. 🛍️</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold mt-2">Lo que buscas, directo al WhatsApp 💬</h2>
+                
+            </div>
+            
+            <!-- Botones de Categoría con Estado Activo Visual -->
+            <div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10">
+                <button onclick="filtrarCategoria('todos', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-semibold transition bg-white text-blue-900 shadow-sm">Todos</button>
+                <button onclick="filtrarCategoria('producto', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">📦 Productos</button>
+                <button onclick="filtrarCategoria('servicio', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🛠️ Servicios</button>
+            </div>
+        </div>
+
+        <!-- Filtro Rápido por Rango de Precios (NUEVO) -->
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 mb-4 shadow-xs flex flex-wrap items-center gap-3">
+            <span class="text-xs font-semibold text-slate-500">💵 Filtrar por precio:</span>
+            <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400">$</span>
+                    <input type="number" id="precio-min" placeholder="Mín" oninput="aplicarFiltros()" class="w-full pl-6 pr-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
+                </div>
+                <span class="text-xs text-slate-400">-</span>
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400">$</span>
+                    <input type="number" id="precio-max" placeholder="Máx" oninput="aplicarFiltros()" class="w-full pl-6 pr-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de Contador y Ordenamiento -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-3">
+            <p id="contador-anuncios" class="text-xs font-medium text-slate-500">Cargando publicaciones...</p>
+            
+            <!-- Selector de Ordenamiento y Controles -->
+            <div class="flex items-center flex-wrap gap-2 w-full sm:w-auto">
+                <!-- Botones de Cambio de Vista (NUEVO) -->
+                <div class="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-xl shadow-xs">
+                    <button onclick="cambiarVista('grid')" class="p-1 rounded-lg text-xs hover:bg-slate-100 transition" title="Vista de Cuadrícula">🔲</button>
+                    <button onclick="cambiarVista('list')" class="p-1 rounded-lg text-xs hover:bg-slate-100 transition" title="Vista de Lista">📋</button>
+                </div>
+
+                <span class="text-xs text-slate-400">Ordenar:</span>
+                <select id="orden-select" onchange="cambiarOrden()" class="text-xs bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-xs cursor-pointer">
+                    <option value="recientes">✨ Más recientes</option>
+                    <option value="precio-menor">📉 Menor precio</option>
+                    <option value="precio-mayor">📈 Mayor precio</option>
+                </select>
+                <!-- Filtro de Favoritos -->
+                <button onclick="alternarFiltroFavoritos(event)" id="btn-favoritos-filtro" class="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-xl font-medium hover:bg-slate-100 transition shadow-xs flex items-center gap-1">
+                    ❤️ <span id="txt-fav-filtro">Favoritos</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Cuadrícula de Productos -->
+        <div id="productos-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Estado de carga skeleton -->
+            <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200 animate-pulse">
+                <div class="bg-slate-200 h-44 rounded-xl mb-3"></div>
+                <div class="bg-slate-200 h-4 w-3/4 rounded mb-2"></div>
+                <div class="bg-slate-200 h-6 w-1/2 rounded"></div>
+            </div>
+        </div>
+    </main>
+
+    
+<!-- Botón Flotante Todo en Uno ultra compacto para celular -->
+<div id="contenedor-menu-flotante" class="fixed bottom-5 right-5 z-50">
+    
+    <!-- Botón Principal Redondo -->
+    <button onclick="togglePanelFlotanteUnificado()" class="relative bg-slate-900 hover:bg-blue-600 text-white w-12 h-12 rounded-full shadow-xl flex items-center justify-center transition-transform duration-300 hover:scale-110 focus:outline-none border-2 border-white/30 cursor-pointer group" title="Menú Rápido">
+        <div class="absolute -inset-1 bg-blue-500 rounded-full blur opacity-30 animate-pulse"></div>
+        <svg id="icono-flotante-unificado" class="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+        <span id="badge-favoritos-flotante" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md border-2 border-white hidden">0</span>
+    </button>
+
+    <!-- Panel Flotante Ultra Compacto -->
+    <div id="panel-flotante-unificado" class="absolute bottom-16 right-0 w-[85vw] max-w-[280px] max-h-[65vh] bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl shadow-xl p-3 hidden transition-all transform origin-bottom-right flex flex-col overflow-hidden text-xs">
+        
+        <!-- Cabecera -->
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-2 flex-shrink-0">
+            <div>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Acceso Rápido</p>
+                <p class="text-[11px] font-bold text-slate-800">VerifiOS Market 🚀</p>
+            </div>
+            <button onclick="togglePanelFlotanteUnificado()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 w-6 h-6 rounded-full flex items-center justify-center font-bold text-[10px] transition cursor-pointer">
+                ✕
+            </button>
+        </div>
+
+        <!-- Contenedor con scroll para pantallas pequeñas -->
+        <div class="overflow-y-auto flex-1 pr-1 space-y-2.5">
+
+            <!-- 1. BUSCADOR RÁPIDO -->
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-400 text-[10px]">🔍</span>
+                <input type="text" id="input-busqueda-flotante" oninput="sincronizarBusquedaFirebase(this.value)" placeholder="Buscar producto o servicio..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-2.5 py-1.5 text-[11px] text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white transition">
+            </div>
+
+            <!-- 2. FILTROS EXPRÉS -->
+            <div>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Filtrar por categoría</p>
+                <div class="grid grid-cols-3 gap-1 text-center">
+                    <button onclick="aplicarFiltroFirebase('todos')" class="bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 font-semibold text-[10px] py-1 rounded-lg transition cursor-pointer">
+                        🌐 Todo
+                    </button>
+                    <button onclick="aplicarFiltroFirebase('producto')" class="bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 font-semibold text-[10px] py-1 rounded-lg transition cursor-pointer">
+                        📦 Productos
+                    </button>
+                    <button onclick="aplicarFiltroFirebase('servicio')" class="bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 font-semibold text-[10px] py-1 rounded-lg transition cursor-pointer">
+                        🛠️ Servicios
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. CENTRO DE FAVORITOS -->
+            <div class="pt-1.5 border-t border-slate-100">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Mis Favoritos</p>
+                    <span id="contador-fav-texto" class="text-[9px] font-bold text-rose-500">0 guardados</span>
+                </div>
+                <div id="lista-favoritos-flotante" class="max-h-24 overflow-y-auto space-y-1 text-left text-[11px] text-slate-500 pr-1">
+                    <p class="text-[10px] text-slate-400 italic text-center py-1">No tienes favoritos aún ❤️</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 4. COMPARTIR APLICACIÓN -->
+        <div class="pt-1.5 mt-1.5 border-t border-slate-100 flex-shrink-0">
+            <button onclick="compartirAppFlotante()" class="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold text-[11px] py-1.5 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer">
+                <span>📤</span> Compartir VerifiOS Market
+            </button>
+        </div>
+
+
+
+    </div>
+</div>
+    
+<!-- Footer Oficial de VerifiOS Market -->
+<footer class="bg-white border-t border-slate-200 mt-auto py-8 px-4 text-center text-slate-500 text-xs">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-4">
+        
+        <!-- Tarjeta Publicitaria Sutil de VerifiOS (Intacta) -->
+        <a href="https://verifios.verificarecuador.com" target="_blank" class="w-full max-w-md bg-slate-50 border border-slate-200 hover:border-blue-300 rounded-2xl p-3.5 flex items-center justify-between gap-3 text-left shadow-2xs transition group block">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-xs group-hover:scale-105 transition">
+                💻
+            </div>
+            <div class="flex-grow min-w-0">
+                <p class="font-bold text-slate-800 text-xs truncate group-hover:text-blue-600 transition">¿Necesitas software o una web para tu negocio?</p>
+                <p class="text-[11px] text-slate-500 truncate">El Ecosistema Digital y de Software para tu Negocio.</p>
+            </div>
+            <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition">
+                Visitar ↗
+            </span>
+        </a>
+
+        <!-- Textos y enlaces de administración y soporte -->
+        <div>
+            <p class="font-medium text-slate-500">VerifiOS Market • Espacio de anuncios libres. Sin cobros de comisiones.</p>
+            <p class="text-[11px] text-slate-400">@ 2026 Derechos Reservados VerifiOS Market • Cuenca, Ecuador</p>
+            
+            <!-- Zona de accesos admin y soporte -->
+            <div class="mt-2 flex items-center justify-center gap-3">
+                <a href="https://wa.me/593992661432?text=¡Hola!%20Vengo%20de%20VerifiOS%20Market%20y%20necesito%20soporte%20o%20reportar%20un%20inconveniente." target="_blank" class="text-xs text-slate-400 hover:text-emerald-600 transition inline-flex items-center gap-1 font-medium">
+                    💬 Soporte técnico / Reportar error
+                </a>
+                <span class="text-slate-300">•</span>
+                <a href="admin.html" class="text-xs text-slate-300 hover:text-slate-600 transition p-2 inline-block" title="Panel de Administración">🔐</a>
+            </div>
+        </div>
+
+    </div>
+</footer>
+       
+
+    </div>
+</footer>
+
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+  const firebaseConfig = {
+            apiKey: "AIzaSyAWvzgjOEx4y3NuSXtJOpIhFZ0uD1kMu3M",
+            authDomain: "verifios-market.firebaseapp.com",
+            projectId: "verifios-market",
+            storageBucket: "verifios-market.firebasestorage.app",
+            messagingSenderId: "830441055062",
+            appId: "1:830441055062:web:eb7780ab47d65691bc6cf7"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let todosLosProductos = [];
+        let categoriaActual = localStorage.getItem('verifios_categoria') || 'todos';
+        let soloFavoritosActivo = localStorage.getItem('verifios_fav_activo') === 'true';
+
+        async function cargarVitrina() {
+            const grid = document.getElementById('productos-grid');
+            try {
+                const snapshot = await db.collection('productos').where('activo', '==', true).get();
+                todosLosProductos = [];
+                snapshot.forEach(doc => {
+                    todosLosProductos.push({ id: doc.id, ...doc.data() });
+                });
+                renderizarProductos(todosLosProductos);
+            } catch (error) {
+                console.error("Error al cargar:", error);
+                grid.innerHTML = '<p class="text-center col-span-full text-red-500 text-sm">Error al conectar con la base de datos.</p>';
+            }
+        }
+
+
+function renderizarProductos(productos) {
+    // Guardamos los productos globalmente para que el panel flotante los lea
+    window.productosGlobal = productos;
+    const grid = document.getElementById('productos-grid');
+    grid.innerHTML = '';
+
+    // Contador dinámico
+    document.getElementById('contador-anuncios').innerText = `Mostrando ${productos.length} ${productos.length === 1 ? 'publicación disponible' : 'publicaciones disponibles'} en Cuenca`;
+
+    if (productos.length === 0) {
+        grid.innerHTML = `
+            <div class="col-span-full text-center py-16 bg-white rounded-3xl border border-slate-200 shadow-xs">
+                <p class="text-4xl mb-3">📭</p>
+                <p class="text-slate-700 font-semibold text-base">No hay publicaciones activas por ahora.</p>
+                <p class="text-xs text-slate-400 mt-1">¡Sé el primero en subir un artículo o servicio!</p>
+                <button onclick="limpiarFiltros()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm">
+                    Limpiar búsqueda y filtros
+                </button>
+            </div>`;
+        return;
+    }
+
+    // Aplicar vista de lista o cuadrícula según la preferencia guardada
+    const modoVista = localStorage.getItem('verifios_vista') || 'grid';
+    if (modoVista === 'list') {
+        grid.className = "flex flex-col gap-3";
+    } else {
+        grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4";
+    }
+
+    productos.forEach(p => {
+        let badgeColor = "bg-blue-50 text-blue-700 border-blue-200";
+        let badgeText = "🛍️ Producto";
+        let btnColor = "bg-emerald-500 hover:bg-emerald-600";
+        let btnTexto = "Comprar";
+        let iconoBtn = "⚡";
+
+        if(p.tipo === 'servicio') { 
+            badgeColor = "bg-purple-50 text-purple-700 border-purple-200"; 
+            badgeText = "🏷️ Servicio"; 
+            btnColor = "bg-purple-600 hover:bg-purple-700";
+            btnTexto = "Consultar / Agendar";
+            iconoBtn = "📅";
+        }
+
+        const estadoVal = p.estado ? p.estado : '';
+        const descVal = p.descripcion ? p.descripcion : '';
+
+        const badgeEstadoHtml = estadoVal ? `<span class="bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block">✨ ${estadoVal}</span>` : '';
+        const descHtml = descVal ? `<p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${descVal}</p>` : '';
+
+        const textoMensaje = p.tipo === 'servicio'
+            ? `¡Hola! 👋 Vi su servicio en *VerifiOS Market* y me interesa agendar una consulta 📅\n\n🛠 Servicio: ${p.nombre}${estadoVal ? `\n✨ Modalidad: ${estadoVal}` : ''}${descVal ? `\n📝 Detalle: ${descVal}` : ''}\n💵 Tarifa: $${Number(p.precio).toFixed(2)}\n\n¿Me cuenta cuál es sus disponibilidad por favor?`
+            : `¡Hola! 👋 Vi esto en *VerifiOS Market* y me interesa 🔥\n\n📍 Tipo: ${badgeText}\n📦 Artículo: ${p.nombre}${estadoVal ? `\n✨ Estado: ${estadoVal}` : ''}${descVal ? `\n📝 Detalles: ${descVal}` : ''}\n💵 Precio: $${Number(p.precio).toFixed(2)}\n\n🛒 ¡Quiero comprarlo! ¿Me confirmas los métodos de pago?`;
+
+        let numeroFinal = p.whatsapp ? String(p.whatsapp).replace(/\D/g, '') : '';
+        if (numeroFinal.startsWith('0')) {
+            numeroFinal = '593' + numeroFinal.substring(1);
+        } else if (!numeroFinal.startsWith('593') && numeroFinal.length > 0) {
+            numeroFinal = '593' + numeroFinal;
+        }
+        
+        const whatsappLink = `https://wa.me/${numeroFinal}?text=${encodeURIComponent(textoMensaje)}`;
+
+        // Identificador único para favoritos y compartir
+        const idUnico = p.id || p.nombre;
+        
+        // Bloque de comentarios y opiniones integrado con estrellas interactivas adaptado para móviles
+        const opinionesHtml = `
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+                <div class="flex items-center justify-between text-[11px] mb-1">
+                    <span class="text-amber-400 font-bold">★★★★★ <span id="promedio-estrellas-${idUnico}" class="text-slate-600 font-normal">(Reseñas)</span></span>
+                    <button onclick="toggleComentarios('${idUnico}')" class="text-blue-600 font-semibold hover:underline cursor-pointer py-0.5 px-1">Ver / Opinar 💬</button>
+                </div>
+                <div id="box-comentarios-${idUnico}" class="hidden mt-2 space-y-2 bg-slate-50 p-2.5 rounded-xl text-left border border-slate-200">
+                    <div id="lista-comentarios-${idUnico}" class="max-h-28 overflow-y-auto space-y-1.5 text-[10px] text-slate-500 pr-1">
+                        <p class="italic text-slate-400">Cargando opiniones...</p>
+                    </div>
+                    <div class="space-y-2 pt-2 border-t border-slate-200">
+                        <!-- Selector de estrellas interactivo -->
+                        <div class="flex items-center gap-1.5 text-xs overflow-x-auto py-0.5">
+                            <span class="text-[10px] text-slate-500 mr-0.5 flex-shrink-0">Tu calificación:</span>
+                            <span id="star-${idUnico}-1" onclick="seleccionarEstrellas('${idUnico}', 1)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
+                            <span id="star-${idUnico}-2" onclick="seleccionarEstrellas('${idUnico}', 2)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
+                            <span id="star-${idUnico}-3" onclick="seleccionarEstrellas('${idUnico}', 3)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
+                            <span id="star-${idUnico}-4" onclick="seleccionarEstrellas('${idUnico}', 4)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
+                            <span id="star-${idUnico}-5" onclick="seleccionarEstrellas('${idUnico}', 5)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
+                        </div>
+                        <input type="text" id="nombre-comentador-${idUnico}" placeholder="Tu nombre" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-blue-500">
+                        <input type="text" id="texto-comentario-${idUnico}" placeholder="Escribe tu opinión..." class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-blue-500">
+                        <button onclick="guardarComentarioFirebase('${idUnico}')" class="w-full bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs py-2 rounded-lg transition cursor-pointer shadow-xs">
+                            Enviar Opinión 💬
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        let card = '';
+        if (modoVista === 'list') {
+            // Diseño en Tarjeta de Lista Compacta optimizada para móvil
+            card = `
+                <div id="card-${p.id}" class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-slate-200 flex flex-col p-3.5 group">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <div class="relative w-full sm:w-24 h-36 sm:h-24 flex-shrink-0 bg-slate-100 rounded-xl overflow-hidden">
+                            <img src="${p.imagen_url}" alt="${p.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&q=80&w=400'">
+                            <span class="absolute top-2 left-2 sm:top-1 sm:left-1 text-[9px] font-semibold px-2 py-0.5 rounded-full border ${badgeColor} bg-white/90 backdrop-blur-sm">${badgeText}</span>
+                        </div>
+                        <div class="flex-grow min-w-0 w-full">
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h2 class="font-semibold text-slate-800 text-sm group-hover:text-blue-600 transition">${p.nombre}</h2>
+                                ${badgeEstadoHtml}
+                            </div>
+                            ${descHtml}
+                            <div class="mt-2 flex items-center justify-between sm:justify-start gap-3">
+                                <span class="text-slate-900 font-extrabold text-base sm:text-sm">$${Number(p.precio).toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end sm:justify-center gap-2 w-full sm:w-auto mt-2 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex-shrink-0">
+                            <button onclick="toggleFavorito('${idUnico}')" class="w-9 h-9 sm:w-8 sm:h-8 bg-slate-100 hover:bg-rose-50 rounded-full flex items-center justify-center text-rose-500 transition" title="Guardar en favoritos">❤️</button>
+                            <button onclick="compartirAnuncio('${p.nombre}', '${p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 sm:p-2 rounded-xl transition" title="Compartir enlace">🔗</button>
+                            <a href="${whatsappLink}" target="_blank" class="${btnColor} text-white font-semibold text-xs py-2 px-3 rounded-xl transition duration-200 shadow-sm flex items-center justify-center gap-1.5 flex-grow sm:flex-grow-0 whitespace-nowrap">
+                                <span>${iconoBtn}</span> ${btnTexto}
+                            </a>
+                        </div>
+                    </div>
+                    ${opinionesHtml}
+                </div>
+            `;
+        } else {
+            // Diseño en Cuadrícula / Grid optimizado para móvil
+            card = `
+                <div id="card-${p.id}" class="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-slate-200 flex flex-col group">
+                    <div class="relative h-48 sm:h-44 bg-slate-100 overflow-hidden">
+                        <img src="${p.imagen_url}" alt="${p.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&q=80&w=400'">
+                        <span class="absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${badgeColor} bg-white/90 backdrop-blur-sm">${badgeText}</span>
+                        
+                        <!-- Botón de Favorito (Corazón) -->
+                        <button onclick="toggleFavorito('${idUnico}')" class="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-rose-500 shadow-sm hover:scale-110 transition" title="Guardar en favoritos">
+                            ❤️
+                        </button>
+                    </div>
+                    <div class="p-3.5 sm:p-4 flex flex-col flex-grow justify-between">
+                        <div>
+                            <h2 class="font-semibold text-slate-800 text-sm line-clamp-2 mb-1 group-hover:text-blue-600 transition leading-snug">${p.nombre}</h2>
+                            <div class="flex items-center gap-1.5 mb-1">
+                                ${badgeEstadoHtml}
+                            </div>
+                            ${descHtml}
+                        </div>
+                        <div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Precio</span>
+                                    <span class="text-slate-900 font-extrabold text-base">$${Number(p.precio).toFixed(2)}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <!-- Botón Compartir enlace -->
+                                    <button onclick="compartirAnuncio('${p.nombre}', '${p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 rounded-xl transition" title="Compartir enlace">
+                                        🔗
+                                    </button>
+                                    <a href="${whatsappLink}" target="_blank" class="${btnColor} text-white font-semibold text-xs py-2 px-3 rounded-xl transition duration-200 shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+                                        <span>${iconoBtn}</span> ${btnTexto}
+                                    </a>
+                                </div>
+                            </div>
+                            ${opinionesHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        grid.innerHTML += card;
+        
+        // 👉 Aquí está la línea que actualiza el contador de estrellas al terminar de pintar cada tarjeta
+        actualizarContadorEstrellas(idUnico);
+    });
+}
+
+    
+      function filtrarCategoria(cat, event) {
+            categoriaActual = cat;
+            localStorage.setItem('verifios_categoria', cat);
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-white/30');
+                btn.classList.add('bg-white/10');
+            });
+            if(event && event.currentTarget) {
+                event.currentTarget.classList.remove('bg-white/10');
+                event.currentTarget.classList.add('bg-white/30');
+            }
+            aplicarFiltros();
+        }
+
+        document.getElementById('buscador').addEventListener('input', (e) => {
+            aplicarFiltros();
+            mostrarSugerenciasHistorial(e.target.value);
+        });
+
+        document.getElementById('buscador').addEventListener('focus', (e) => {
+            mostrarSugerenciasHistorial(e.target.value);
+        });
+
+        document.getElementById('buscador').addEventListener('blur', () => {
+            setTimeout(() => ocultarSugerenciasHistorial(), 250);
+        });
+
+        function aplicarFilosGenerales() {} // placeholder
+
+        function aplicarFiltros() {
+            let filtrados = [...todosLosProductos];
+
+            // 1. Filtrar por categoría
+            if (typeof categoriaActual !== 'undefined' && categoriaActual !== 'todos') {
+                filtrados = filtrados.filter(p => p.tipo === categoriaActual);
+            }
+
+            // 2. Filtrar por buscador
+            const buscadorInput = document.getElementById('buscador');
+            if (buscadorInput && buscadorInput.value.trim() !== '') {
+                const texto = buscadorInput.value.toLowerCase().trim();
+                filtrados = filtrados.filter(p => 
+                    (p.nombre && p.nombre.toLowerCase().includes(texto)) || 
+                    (p.descripcion && p.descripcion.toLowerCase().includes(texto))
+                );
+                guardarHistorialBusqueda(buscadorInput.value.trim());
+            }
+
+            // 3. Filtrar por Rango de Precios
+            const precioMinInput = document.getElementById('precio-min');
+            const precioMaxInput = document.getElementById('precio-max');
+            if (precioMinInput && precioMinInput.value !== '') {
+                const min = Number(precioMinInput.value);
+                filtrados = filtrados.filter(p => Number(p.precio) >= min);
+            }
+            if (precioMaxInput && precioMaxInput.value !== '') {
+                const max = Number(precioMaxInput.value);
+                filtrados = filtrados.filter(p => Number(p.precio) <= max);
+            }
+
+            // 4. Filtrar por Favoritos
+            if (typeof soloFavoritosActivo !== 'undefined' && soloFavoritosActivo) {
+                filtrados = filtrados.filter(p => {
+                    const idUnico = p.id || p.nombre;
+                    return favoritosArray.includes(String(idUnico));
+                });
+            }
+
+            // 5. Ordenamiento por precio
+            const ordenSelect = document.getElementById('orden-select');
+            if (ordenSelect) {
+                const tipoOrden = ordenSelect.value;
+                if (tipoOrden === 'precio-menor') {
+                    filtrados.sort((a, b) => Number(a.precio) - Number(b.precio));
+                } else if (tipoOrden === 'precio-mayor') {
+                    filtrados.sort((a, b) => Number(b.precio) - Number(a.precio));
+                }
+            }
+
+            renderizarProductos(filtrados);
+        }
+
+        function filtrarYMostrarProductos() {
+            aplicarFiltros();
+        }
+
+        // Aplicar estado visual inicial de favoritos si existe
+        if (soloFavoritosActivo) {
+            const btnFav = document.getElementById('btn-favoritos-filtro');
+            const txtFav = document.getElementById('txt-fav-filtro');
+            if (btnFav) btnFav.classList.add('bg-rose-50', 'border-rose-300', 'text-rose-600');
+            if (txtFav) txtFav.innerText = 'Ver Favoritos (Activo)';
+        }
+
+        cargarVitrina();
+
+        // 🔄 OCULTAR / MOSTRAR HEADER AL HACER SCROLL
+        let ultimoScroll = 0;
+        const header = document.getElementById('main-header');
+
+        window.addEventListener('scroll', () => {
+            const scrollActual = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollActual <= 50) {
+                header.style.transform = 'translateY(0)';
+                return;
+            }
+
+            if (scrollActual > ultimoScroll) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+
+            ultimoScroll = scrollActual <= 0 ? 0 : scrollActual;
+        });
+
+        function actualizarContadorYFiltros(totalMostrados) {
+            const contador = document.getElementById('contador-anuncios');
+            if (contador) {
+                contador.innerText = `Mostrando ${totalMostrados} ${totalMostrados === 1 ? 'publicación disponible' : 'publicaciones disponibles'} en Cuenca`;
+            }
+        }
+
+        function cambiarCategoriaActiva(event) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-blue-900', 'shadow-sm');
+                btn.classList.add('bg-transparent', 'hover:bg-white/20', 'text-white');
+            });
+            const btnSeleccionado = event.currentTarget;
+            btnSeleccionado.classList.remove('bg-transparent', 'hover:bg-white/20', 'text-white');
+            btnSeleccionado.classList.add('bg-white', 'text-blue-900', 'shadow-sm');
+        }
+
+        // 1. Compartir enlace del anuncio
+        function compartirAnuncio(nombre, precio) {
+            const texto = `¡Mira este artículo en VerifiOS Market de Cuenca!\n📦 ${nombre}\n💵 $${Number(precio).toFixed(2)}\n🔗 ${window.location.href}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'VerifiOS Market',
+                    text: texto,
+                    url: window.location.href,
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(texto);
+                alert('¡Enlace copiado al portapapeles para compartir en WhatsApp o redes!');
+            }
+        }
+
+        // 2. Guardar o quitar de Favoritos
+        let favoritosArray = JSON.parse(localStorage.getItem('verifios_favoritos')) || [];
+
+        function toggleFavorito(idUnico) {
+            const index = favoritosArray.indexOf(idUnico);
+            if (index > -1) {
+                favoritosArray.splice(index, 1);
+                alert('Eliminado de favoritos ❤️');
+            } else {
+                favoritosArray.push(idUnico);
+                alert('¡Guardado en favoritos con éxito! ❤️');
+            }
+            localStorage.setItem('verifios_favoritos', JSON.stringify(favoritosArray));
+            
+            if (typeof filtrarYMostrarProductos === 'function') {
+                filtrarYMostrarProductos();
+            }
+        }
+
+        // 3. Filtrar por favoritos
+        function alternarFiltroFavoritos(event) {
+            soloFavoritosActivo = !soloFavoritosActivo;
+            localStorage.setItem('verifios_fav_activo', soloFavoritosActivo);
+            const btn = document.getElementById('btn-favoritos-filtro');
+            const txt = document.getElementById('txt-fav-filtro');
+            
+            if (soloFavoritosActivo) {
+                if(btn) btn.classList.add('bg-rose-50', 'border-rose-300', 'text-rose-600');
+                if(txt) txt.innerText = 'Ver Favoritos (Activo)';
+            } else {
+                if(btn) btn.classList.remove('bg-rose-50', 'border-rose-300', 'text-rose-600');
+                if(txt) txt.innerText = 'Favoritos';
+            }
+            
+            if (typeof filtrarYMostrarProductos === 'function') {
+                filtrarYMostrarProductos();
+            }
+        }
+
+        // 4. Cambiar orden
+        function cambiarOrden() {
+            if (typeof filtrarYMostrarProductos === 'function') {
+                filtrarYMostrarProductos();
+            }
+        }
+
+        // 5. Limpiar filtros y búsqueda
+        function limpiarFiltros() {
+            const buscador = document.getElementById('buscador');
+            if (buscador) buscador.value = '';
+            const minInput = document.getElementById('precio-min');
+            if (minInput) minInput.value = '';
+            const maxInput = document.getElementById('precio-max');
+            if (maxInput) maxInput.value = '';
+            
+            localStorage.removeItem('verifios_categoria');
+            localStorage.removeItem('verifios_fav_activo');
+            soloFavoritosActivo = false;
+            categoriaActual = 'todos';
+
+            const btnFav = document.getElementById('btn-favoritos-filtro');
+            const txtFav = document.getElementById('txt-fav-filtro');
+            if (btnFav) btnFav.classList.remove('bg-rose-50', 'border-rose-300', 'text-rose-600');
+            if (txtFav) txtFav.innerText = 'Favoritos';
+
+            if (typeof filtrarCategoria === 'function') {
+                const btnTodos = document.querySelector('.cat-btn');
+                if (btnTodos) btnTodos.click();
+            } else if (typeof filtrarYMostrarProductos === 'function') {
+                filtrarYMostrarProductos();
+            }
+        }
+
+        // --- FUNCIONALIDADES NUEVAS ---
+
+        // A. Cambiar Vista (Grid / List)
+        function cambiarVista(modo) {
+            localStorage.setItem('verifios_vista', modo);
+            aplicarFiltros();
+        }
+
+        // B. Historial de Búsquedas Recientes
+        function guardarHistorialBusqueda(termino) {
+            if (!termino || termino.length < 2) return;
+            let historial = JSON.parse(localStorage.getItem('verifios_historial')) || [];
+            historial = historial.filter(item => item.toLowerCase() !== termino.toLowerCase());
+            historial.unshift(termino);
+            if (historial.length > 4) historial.pop();
+            localStorage.setItem('verifios_historial', JSON.stringify(historial));
+        }
+
+        function mostrarSugerenciasHistorial(filtroActual) {
+            let historial = JSON.parse(localStorage.getItem('verifios_historial')) || [];
+            if (historial.length === 0) return;
+
+            let contenedorSugerencias = document.getElementById('historial-sugerencias');
+            const buscador = document.getElementById('buscador');
+            if (!buscador) return;
+
+            if (!contenedorSugerencias) {
+                contenedorSugerencias = document.createElement('div');
+                contenedorSugerencias.id = 'historial-sugerencias';
+                contenedorSugerencias.className = 'absolute left-0 right-0 mt-1 bg-white rounded-xl shadow-lg border border-slate-200 z-50 overflow-hidden';
+                buscador.parentNode.style.position = 'relative';
+                buscador.parentNode.appendChild(contenedorSugerencias);
+            }
+
+            let filtradosHistorial = historial.filter(h => h.toLowerCase().includes(filtroActual.toLowerCase()));
+            if (filtradosHistorial.length === 0) {
+                contenedorSugerencias.innerHTML = '';
+                return;
+            }
+
+            let html = '<div class="p-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50 border-b border-slate-100">Búsquedas recientes</div>';
+            filtradosHistorial.forEach(h => {
+                html += `<div onclick="seleccionarHistorial('${h}')" class="px-3 py-2 text-xs text-slate-700 hover:bg-slate-100 cursor-pointer flex items-center justify-between"><span>🕒 ${h}</span></div>`;
+            });
+            contenedorSugerencias.innerHTML = html;
+        }
+
+        function ocultarSugerenciasHistorial() {
+            const contenedorSugerencias = document.getElementById('historial-sugerencias');
+            if (contenedorSugerencias) {
+                contenedorSugerencias.innerHTML = '';
+            }
+        }
+
+        function seleccionarHistorial(termino) {
+            const buscador = document.getElementById('buscador');
+            if (buscador) {
+                buscador.value = termino;
+                aplicarFiltros();
+                ocultarSugerenciasHistorial();
+            }
+        }
+
+
+// --- NOTIFICADOR EN TIEMPO REAL (Independiente) ---
+let primerCargaNotif = true;
+let idsConocidosNotif = new Set();
+
+db.collection('productos').where('activo', '==', true).onSnapshot((snapshot) => {
+    let nuevosRecientes = [];
+
+    snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+            let data = change.doc.data();
+            let id = change.doc.id;
+
+            if (!primerCargaNotif && !idsConocidosNotif.has(id)) {
+                nuevosRecientes.push({ id: id, ...data });
+            }
+            idsConocidosNotif.add(id);
+        }
+    });
+
+    if (!primerCargaNotif && nuevosRecientes.length > 0) {
+        mostrarNotificacionEstiloFacebook(nuevosRecientes[0]);
+    }
+
+    if (primerCargaNotif) {
+        snapshot.forEach(doc => idsConocidosNotif.add(doc.id));
+        primerCargaNotif = false;
+    }
+});
+
+
+// --- FUNCIÓN VISUAL BLINDADA (100% Segura contra fallos de texto) ---
+function mostrarNotificacionEstiloFacebook(p) {
+    const alertaAnterior = document.getElementById('notif-fb-market');
+    if (alertaAnterior) alertaAnterior.remove();
+
+    let emojiTipo = p.tipo === 'servicio' ? '🛠️' : '📦';
+    let nombreProd = p.nombre || 'Nuevo anuncio';
+    let precioFormateado = p.precio ? '$' + Number(p.precio).toFixed(2) : 'A consultar';
+    let descripcionBreve = p.descripcion || '¡Nueva publicación disponible!';
+    let imagenSrc = p.imagen_url || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&q=80&w=200';
+
+    // Contenedor principal flotante
+    const notif = document.createElement('div');
+    notif.id = 'notif-fb-market';
+    notif.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999999;
+        max-width: 340px;
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        padding: 14px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-family: inherit;
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    `;
+
+    // 1. Imagen y Badge
+    const divImg = document.createElement('div');
+    divImg.style.cssText = 'position: relative; width: 50px; height: 50px; flex-shrink: 0; background: #f1f5f9; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0;';
+    
+    const img = document.createElement('img');
+    img.src = imagenSrc;
+    img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+    divImg.appendChild(img);
+
+    const spanEmoji = document.createElement('span');
+    spanEmoji.innerText = emojiTipo;
+    spanEmoji.style.cssText = 'position: absolute; top: 2px; left: 2px; font-size: 9px; background: #2563eb; color: #fff; padding: 1px 4px; border-radius: 4px;';
+    divImg.appendChild(spanEmoji);
+    notif.appendChild(divImg);
+
+    // 2. Contenido de textos y botones
+    const divContenido = document.createElement('div');
+    divContenido.style.cssText = 'flex-grow: 1; min-width: 0;';
+
+    // Cabecera (Título y botón cerrar)
+    const divHeader = document.createElement('div');
+    divHeader.style.cssText = 'display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;';
+    
+    const spanNuevo = document.createElement('span');
+    spanNuevo.innerText = '✨ ¡Nuevo en Cuenca!';
+    spanNuevo.style.cssText = 'font-size: 10px; font-weight: 700; color: #2563eb; text-transform: uppercase;';
+    divHeader.appendChild(spanNuevo);
+
+    const btnCerrar = document.createElement('button');
+    btnCerrar.innerText = '✕';
+    btnCerrar.onclick = () => notif.remove();
+    btnCerrar.style.cssText = 'background: none; border: none; color: #94a3b8; font-size: 14px; font-weight: bold; cursor: pointer; padding: 0 4px;';
+    divHeader.appendChild(btnCerrar);
+    divContenido.appendChild(divHeader);
+
+    // Nombre del producto
+    const h4Nombre = document.createElement('div');
+    h4Nombre.innerText = nombreProd;
+    h4Nombre.style.cssText = 'font-weight: 700; color: #1e293b; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px;';
+    divContenido.appendChild(h4Nombre);
+
+    // Descripción
+    const pDesc = document.createElement('div');
+    pDesc.innerText = descripcionBreve;
+    pDesc.style.cssText = 'font-size: 11px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px;';
+    divContenido.appendChild(pDesc);
+
+    // Pie de tarjeta (Precio y Botón de acción)
+    const divFooter = document.createElement('div');
+    divFooter.style.cssText = 'display: flex; align-items: center; justify-content: space-between;';
+
+    const spanPrecio = document.createElement('span');
+    spanPrecio.innerText = precioFormateado;
+    spanPrecio.style.cssText = 'color: #0f172a; font-weight: 800; font-size: 13px;';
+    divFooter.appendChild(spanPrecio);
+
+    const btnVer = document.createElement('button');
+    btnVer.innerText = 'Ver anuncio 👀';
+    btnVer.onclick = () => verYDestacarProducto(p.id);
+    btnVer.style.cssText = 'background-color: #2563eb; color: white; border: none; font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 8px; cursor: pointer;';
+    divFooter.appendChild(btnVer);
+
+    divContenido.appendChild(divFooter);
+    notif.appendChild(divContenido);
+
+    // Inyectar en el body
+    document.body.appendChild(notif);
+
+    // Animación de entrada
+    setTimeout(() => {
+        notif.style.transform = 'translateY(0)';
+        notif.style.opacity = '1';
+    }, 50);
+
+    // Auto-ocultar a los 10 segundos
+    setTimeout(() => {
+        if (notif && notif.parentNode) {
+            notif.style.transform = 'translateY(-20px)';
+            notif.style.opacity = '0';
+            setTimeout(() => notif.remove(), 400);
+        }
+    }, 10000);
+}
+
+// --- FUNCIÓN DE SCROLL EXACTO HASTA EL PRODUCTO ---
+function verYDestacarProducto(idProducto) {
+    const alerta = document.getElementById('notif-fb-market');
+    if (alerta) alerta.remove();
+
+    // Buscamos la tarjeta en la página actual usando el ID que pusimos en el grid
+    const tarjeta = document.getElementById(`card-${idProducto}`);
+    
+    if (tarjeta) {
+        // Hacemos scroll suave hasta centrar el producto en la pantalla
+        tarjeta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Efecto visual de borde brillante (ring) temporal para resaltarlo
+        tarjeta.classList.add('ring-4', 'ring-blue-500', 'transition-all', 'duration-500');
+        setTimeout(() => {
+            tarjeta.classList.remove('ring-4', 'ring-blue-500');
+        }, 3000);
+    } else {
+        // Plan de respaldo por si acaso no lo encuentra en el DOM actual
+        location.reload();
+    }
+}
+
+
+function togglePanelFlotanteUnificado() {
+    const panel = document.getElementById('panel-flotante-unificado');
+    const input = document.getElementById('input-busqueda-flotante');
+    
+    if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        if (input) input.focus();
+        refrescarFavoritosUI(); 
+    } else {
+        panel.classList.add('hidden');
+    }
+}
+
+function sincronizarBusquedaFirebase(texto) {
+    const inputPrincipal = document.getElementById('buscador'); // ID de tu buscador principal
+    if (inputPrincipal) {
+        inputPrincipal.value = texto;
+        inputPrincipal.dispatchEvent(new Event('input')); 
+    }
+}
+
+function aplicarFiltroFirebase(tipo) {
+    // Dispara tu función de filtrado existente o simula clics en tus botones de categoría
+    if (typeof filtrarCategoria === 'function') {
+        filtrarCategoria(tipo);
+    }
+    togglePanelFlotanteUnificado();
+}
+
+function compartirAppFlotante() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'VerifiOS Market',
+            text: '¡Explora este espacio de anuncios libres de productos y servicios en Cuenca!',
+            url: window.location.href
+        }).catch(err => console.log('Error al compartir:', err));
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('¡Enlace copiado al portapapeles!');
+    }
+}
+
+function refrescarFavoritosUI() {
+    const badge = document.getElementById('badge-favoritos-flotante');
+    const contadorTexto = document.getElementById('contador-fav-texto');
+    const contenedorLista = document.getElementById('lista-favoritos-flotante');
+    
+    let idsFavs = (typeof favoritosArray !== 'undefined') ? favoritosArray : [];
+    
+    if (idsFavs.length > 0) {
+        contenedorLista.innerHTML = '';
+        let itemsRenderizados = 0; // Contador real de lo que sí se dibuja
+        
+        idsFavs.forEach((idUnico) => {
+            let tituloMostrar = '';
+
+            // 1. Buscamos en productos globales
+            if (window.productosGlobal && Array.isArray(window.productosGlobal)) {
+                let prod = window.productosGlobal.find(p => String(p.id || p.nombre) === String(idUnico));
+                if (prod && (prod.nombre || prod.titulo)) {
+                    tituloMostrar = prod.nombre || prod.titulo;
+                }
+            }
+
+            // 2. Buscamos en la tarjeta del DOM
+            if (!tituloMostrar) {
+                const cardDom = document.getElementById(`card-${idUnico}`);
+                if (cardDom) {
+                    const h2Element = cardDom.querySelector('h2');
+                    if (h2Element) tituloMostrar = h2Element.textContent.trim();
+                }
+            }
+
+            // Si no tiene título válido, omitimos este elemento para que no pinte basura ni altere el número
+            if (!tituloMostrar) return;
+
+            itemsRenderizados++; // Sumamos solo si se dibuja con éxito
+
+            contenedorLista.innerHTML += `
+                <div onclick="saltarAFavoritoFirestore('${idUnico}')" class="flex items-center justify-between bg-slate-50 hover:bg-slate-100 p-2 rounded-xl cursor-pointer transition">
+                    <span class="truncate font-medium text-slate-700 text-[11px] max-w-[170px]">${tituloMostrar}</span>
+                    <span class="text-rose-500 text-[10px] font-bold">Ver ↗</span>
+                </div>`;
+        });
+
+        // Actualizamos el contador visual usando exactamente la cantidad de elementos mostrados
+        if (itemsRenderizados > 0) {
+            badge.textContent = itemsRenderizados;
+            badge.classList.remove('hidden');
+            contadorTexto.textContent = `${itemsRenderizados} guardado${itemsRenderizados > 1 ? 's' : ''}`;
+        } else {
+            badge.classList.add('hidden');
+            contadorTexto.textContent = '0 guardados';
+            contenedorLista.innerHTML = `<p class="text-[11px] text-slate-400 italic text-center py-1">No tienes favoritos aún ❤️</p>`;
+        }
+
+    } else {
+        badge.classList.add('hidden');
+        contadorTexto.textContent = '0 guardados';
+        contenedorLista.innerHTML = `<p class="text-[11px] text-slate-400 italic text-center py-1">No tienes favoritos aún ❤️</p>`;
+    }
+}
+
+// Salto directo haciendo scroll a la tarjeta exacta usando tu id="card-${id}"
+function saltarAFavoritoFirestore(id) {
+    togglePanelFlotanteUnificado();
+    
+    const tarjeta = document.getElementById(`card-${id}`);
+    if (tarjeta) {
+        tarjeta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        tarjeta.classList.add('ring-4', 'ring-rose-400', 'transition-all');
+        setTimeout(() => {
+            tarjeta.classList.remove('ring-4', 'ring-rose-400');
+        }, 2000);
+    }
+}
+
+
+
+
+// Abrir o cerrar el cajón de opiniones de un producto específico
+function toggleComentarios(idProducto) {
+    const box = document.getElementById(`box-comentarios-${idProducto}`);
+    if (box) {
+        box.classList.toggle('hidden');
+        if (!box.classList.contains('hidden')) {
+            cargarComentarios(idProducto);
+        }
+    }
+}
+
+function cargarComentarios(productId) {
+    const contenedor = document.getElementById(`lista-comentarios-${productId}`);
+    if (!contenedor) return;
+
+    // Usamos onSnapshot de la SDK clásica de Firebase con db.collection
+    db.collection("comentarios")
+      .where("productId", "==", String(productId))
+      .onSnapshot((snapshot) => {
+          let comentarios = [];
+          snapshot.forEach((doc) => {
+              comentarios.push({ id: doc.id, ...doc.data() });
+          });
+
+          // Ordenamos localmente del más nuevo al más antiguo para evitar índices
+          comentarios.sort((a, b) => {
+              const fechaA = a.fecha?.toMillis ? a.fecha.toMillis() : (new Date(a.fecha || 0).getTime());
+              const fechaB = b.fecha?.toMillis ? b.fecha.toMillis() : (new Date(b.fecha || 0).getTime());
+              return fechaB - fechaA;
+          });
+
+          if (comentarios.length === 0) {
+              contenedor.innerHTML = `<p class="italic text-slate-400">Sé el primero en dejar una opinión 💬</p>`;
+              return;
+          }
+
+          contenedor.innerHTML = '';
+          comentarios.forEach(c => {
+              let fechaFormateada = 'Reciente';
+              if (c.fecha) {
+                  const dateObj = c.fecha.toDate ? c.fecha.toDate() : new Date(c.fecha);
+                  fechaFormateada = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              }
+
+              const item = document.createElement('div');
+              item.className = "bg-white p-1.5 rounded-lg border border-slate-100 shadow-2xs mb-1";
+              item.innerHTML = `
+                  <div class="flex justify-between items-center text-[9px] text-slate-400 mb-0.5">
+                      <span class="font-bold text-slate-700">${escapeHtml(c.nombre || 'Anónimo')}</span>
+                      <span>${fechaFormateada}</span>
+                  </div>
+                  <p class="text-[10px] text-slate-600 break-words">${escapeHtml(c.texto || '')}</p>
+              `;
+              contenedor.appendChild(item);
+          });
+      }, (error) => {
+          console.error("Error cargando comentarios en tiempo real: ", error);
+          contenedor.innerHTML = `<p class="text-rose-500 italic">Error al sincronizar opiniones.</p>`;
+      });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+// Variable temporal para guardar la estrella seleccionada en el formulario actual
+let calificacionSeleccionada = 5; // Por defecto 5 estrellas
+
+function seleccionarEstrellas(productId, rating) {
+    calificacionSeleccionada = rating;
+    // Actualizar visualmente las estrellas del formulario
+    for (let i = 1; i <= 5; i++) {
+        const star = document.getElementById(`star-${productId}-${i}`);
+        if (star) {
+            if (i <= rating) {
+                star.classList.add('text-amber-400');
+                star.classList.remove('text-slate-300');
+            } else {
+                star.classList.remove('text-amber-400');
+                star.classList.add('text-slate-300');
+            }
+        }
+    }
+}
+
+function cargarComentarios(productId) {
+    const contenedor = document.getElementById(`lista-comentarios-${productId}`);
+    if (!contenedor) return;
+
+    db.collection("comentarios")
+      .where("productId", "==", String(productId))
+      .onSnapshot((snapshot) => {
+          let comentarios = [];
+          snapshot.forEach((doc) => {
+              comentarios.push({ id: doc.id, ...doc.data() });
+          });
+
+          comentarios.sort((a, b) => {
+              const fechaA = a.fecha?.toMillis ? a.fecha.toMillis() : (new Date(a.fecha || 0).getTime());
+              const fechaB = b.fecha?.toMillis ? b.fecha.toMillis() : (new Date(b.fecha || 0).getTime());
+              return fechaB - fechaA;
+          });
+
+          // Calcular promedio de estrellas
+          let sumaEstrellas = 0;
+          comentarios.forEach(c => { sumaEstrellas += (Number(c.rating) || 5); });
+          let promedio = comentarios.length > 0 ? (sumaEstrellas / comentarios.length).toFixed(1) : "5.0";
+
+          // Actualizar el texto de reseñas en la tarjeta si existe el elemento
+          // (Busca el elemento de estrellas principal de la tarjeta para actualizar su promedio)
+          
+          if (comentarios.length === 0) {
+              contenedor.innerHTML = `<p class="italic text-slate-400 text-xs py-1">Sé el primero en dejar una opinión 💬</p>`;
+              return;
+          }
+
+          contenedor.innerHTML = '';
+          comentarios.forEach(c => {
+              let fechaFormateada = 'Reciente';
+              if (c.fecha) {
+                  const dateObj = c.fecha.toDate ? c.fecha.toDate() : new Date(c.fecha);
+                  fechaFormateada = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              }
+
+              // Generar estrellitas visuales para el comentario
+              let estrellasHtml = '';
+              let ratingVal = Number(c.rating) || 5;
+              for (let i = 1; i <= 5; i++) {
+                  estrellasHtml += `<span class="${i <= ratingVal ? 'text-amber-400' : 'text-slate-200'}">★</span>`;
+              }
+
+              const item = document.createElement('div');
+              item.className = "bg-white p-2 rounded-lg border border-slate-100 shadow-2xs mb-1.5";
+              item.innerHTML = `
+                  <div class="flex justify-between items-center text-[10px] text-slate-400 mb-0.5">
+                      <span class="font-bold text-slate-700">${escapeHtml(c.nombre || 'Anónimo')}</span>
+                      <div class="flex items-center gap-1">
+                          <span class="text-xs">${estrellasHtml}</span>
+                          <span>${fechaFormateada}</span>
+                      </div>
+                  </div>
+                  <p class="text-[11px] text-slate-600 break-words">${escapeHtml(c.texto || '')}</p>
+              `;
+              contenedor.appendChild(item);
+          });
+      }, (error) => {
+          console.error("Error cargando comentarios: ", error);
+      });
+}
+
+// Variable global temporal para la calificación que selecciona el usuario
+window.calificacionSeleccionada = 5;
+
+function seleccionarEstrellas(productId, rating) {
+    window.calificacionSeleccionada = rating;
+    for (let i = 1; i <= 5; i++) {
+        const star = document.getElementById(`star-${productId}-${i}`);
+        if (star) {
+            if (i <= rating) {
+                star.classList.add('text-amber-400');
+                star.classList.remove('text-slate-300', 'text-slate-200');
+            } else {
+                star.classList.remove('text-amber-400');
+                star.classList.add('text-slate-300');
+            }
+        }
+    }
+}
+
+function actualizarContadorEstrellas(productId) {
+    db.collection("comentarios")
+        .where("productId", "==", String(productId))
+        .get()
+        .then((snapshot) => {
+            let suma = 0;
+            let totalComentarios = snapshot.size;
+
+            if (totalComentarios === 0) return;
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                suma += (Number(data.rating) || 5);
+            });
+
+            const promedio = (suma / totalComentarios).toFixed(1);
+            
+            // Actualiza el texto con el promedio real y el total de opiniones
+            const spanReseñas = document.getElementById(`promedio-estrellas-${productId}`);
+            if (spanReseñas) {
+                spanReseñas.innerHTML = `<b class="text-slate-700">${promedio}</b> (${totalComentarios} ${totalComentarios === 1 ? 'opinión' : 'opiniones'})`;
+            }
+        })
+        .catch((error) => {
+            console.error("Error al calcular promedio:", error);
+        });
+}
+
+function guardarComentarioFirebase(productId) {
+    const inputNombre = document.getElementById(`nombre-comentador-${productId}`);
+    const inputTexto = document.getElementById(`texto-comentario-${productId}`);
+
+    const nombre = inputNombre ? inputNombre.value.trim() : '';
+    const texto = inputTexto ? inputTexto.value.trim() : '';
+
+    if (!nombre || !texto) {
+        alert("Por favor ingresa tu nombre y tu opinión.");
+        return;
+    }
+
+    db.collection("comentarios").add({
+        productId: String(productId),
+        nombre: nombre,
+        texto: texto,
+        rating: Number(window.calificacionSeleccionada || 5),
+        fecha: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+        if (inputTexto) inputTexto.value = '';
+        if (inputNombre) inputNombre.value = '';
+        window.calificacionSeleccionada = 5; // Reiniciar
+        actualizarContadorEstrellas(productId); // Actualizar al instante
+    })
+    .catch((error) => {
+        console.error("Error al guardar comentario: ", error);
+        alert("Hubo un error al enviar tu opinión.");
+    });
+}
+
+
+// Lógica para el botón de instalación de la Web App
+let deferredPrompt;
+const btnInstalar = document.getElementById('btnInstalarApp');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Previene que el navegador muestre su banner automático por defecto
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Muestra nuestro botón personalizado en la barra de navegación
+    if (btnInstalar) {
+        btnInstalar.style.display = 'inline-flex';
+    }
+});
+
+if (btnInstalar) {
+    btnInstalar.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        
+        // Muestra el aviso nativo de instalación
+        deferredPrompt.prompt();
+        
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            console.log('El usuario instaló la Web App');
+        }
+        
+        deferredPrompt = null;
+        btnInstalar.style.display = 'none';
+    });
+}
+
+// Registrar el Service Worker para habilitar la PWA
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
+            .catch(err => console.log('Error al registrar el Service Worker:', err));
+    });
+}
+
+
+    </script>
+</body>
+</html>

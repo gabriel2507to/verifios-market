@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publica gratis - VerifiOS Market</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased py-10 px-4 min-h-screen flex flex-col justify-center items-center">
+
+    <div class="max-w-lg w-full bg-white rounded-3xl shadow-xl p-8 border border-slate-200">
+        
+        <!-- Encabezado con Logotipo Propio -->
+        <div class="text-center mb-6 flex flex-col items-center">
+            <img src="img/logomarket3.png" alt="VerifiOS Market Logo" class="w-60 h-60 object-contain mb-3 rounded-2xl shadow-sm">
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900">Publica en VerifiOS Market</h1>
+            <p class="text-xs text-slate-500 mt-1">Vende tus artículos o servicios directo en Cuenca sin intermediarios.</p>
+        </div>
+        
+        <!-- Aviso Legal Rápido -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 mb-6 text-xs text-amber-900 flex items-start gap-2.5">
+            <span class="text-base">⚠️</span>
+            <p><strong>Aviso:</strong> El sistema bloquea automáticamente palabras no permitidas. Cada usuario es responsable de su publicación; la plataforma no maneja pagos.</p>
+        </div>
+
+  <form id="userProductForm" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">¿Qué vas a publicar?</label>
+                <select id="tipo" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="producto">📦 Producto / Cosa Usada (Ej: Zapatos, Horno, Ropa)</option>
+                    <option value="servicio">🛠️ Servicio Profesional (Ej: Uñas, Plomería, Clases)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Título del anuncio</label>
+                <input type="text" id="nombre" placeholder="Ej: Exprimidor Oster semi-nuevo" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- NUEVO: Estado del artículo -->
+            <div>
+                <label id="label-estado" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Estado del artículo</label>
+                <select id="estado" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="✨ Nuevo (En caja / Sin uso)">✨ Nuevo (En caja / Sin uso)</option>
+                    <option value="💎 Seminuevo (Poco uso / Excelente estado)">💎 Seminuevo (Poco uso / Excelente estado)</option>
+                    <option value="🔄 Usado (Funcional / Detalles normales)">🔄 Usado (Funcional / Detalles normales)</option>
+                </select>
+            </div>
+
+            <!-- NUEVO: Descripción o detalles -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Descripción o detalles breves</label>
+                <textarea id="descripcion" rows="2" placeholder="Ej: Incluye cargador original, poco tiempo de uso..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+            </div>
+
+            <div>
+                <label id="label-precio" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Precio ($)</label>
+                <input type="number" step="0.01" id="precio" placeholder="15.00" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Tu WhatsApp de contacto</label>
+                <input type="text" id="whatsapp" placeholder="0987654321" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p class="text-[11px] text-slate-400 mt-1">Límite de 3 avisos activos automáticos por número.</p>
+            </div>
+
+            <!-- Selector de Foto Real desde el Celular (1 sola foto obligatoria) -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Foto del producto (Sube 1 desde tu cel)</label>
+                <input type="file" id="imagen_file" accept="image/png, image/jpeg, image/webp" required class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                <p class="text-[11px] text-slate-400 mt-1">Formatos aceptados: JPG, PNG o WebP.</p>
+            </div>
+
+            <!-- Casilla de Aceptación Obligatoria (Términos Profesionales) -->
+            <div class="flex items-start space-x-3 pt-2 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                <input type="checkbox" id="terminos" required class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded">
+                <label for="terminos" class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                    <strong>Términos de Uso y Descargo de Responsabilidad:</strong> Declaro y garantizo bajo juramento que la información, características, precio y origen del bien o servicio ofertado son lícitos, veraces y de mi absoluta propiedad o legítima gestión. Reconozco expresamente que <strong>VerifiOS Market</strong> opera exclusivamente como una plataforma tecnológica de intermediación pasiva y directorio publicitario libre, sin intervenir en las negociaciones, transacciones económicas, pagos o entregas. En consecuencia, eximo de manera formal e irrevocable a la plataforma, sus administradores y desarrolladores de cualquier responsabilidad civil, penal, administrativa o de índole comercial derivada de la presente oferta o de la posterior transacción entre particulares.
+                </label>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3.5 rounded-xl font-bold text-sm transition shadow-md shadow-blue-500/20">
+                Publicar en VerifiOS Market 🚀
+            </button>
+        </form>
+
+        <p id="status" class="mt-4 text-center text-xs font-semibold"></p>
+        
+        <div class="mt-8 pt-4 border-t border-slate-100 text-center">
+            <p class="text-[11px] text-slate-400">@ 2026 Derechos Reservados VerifiOS Market • Cuenca, Ecuador</p>
+        </div>
+
+<!-- Footer Oficial de VerifiOS Market con Publicidad Sutil Integrada -->
+    <footer class="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 text-center text-slate-500 text-xs shadow-md">
+        <div class="flex flex-col items-center gap-4">
+            
+            <!-- Tarjeta Publicitaria Sutil de VerifiOS -->
+            <a href="https://verifios.verificarecuador.com" target="_blank" class="w-full bg-slate-50 border border-slate-200 hover:border-blue-300 rounded-2xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left transition group block shadow-2xs">
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-xs group-hover:scale-105 transition">
+                        💻
+                    </div>
+                    <div class="min-w-0 text-center sm:text-left">
+                        <p class="font-bold text-slate-800 text-xs group-hover:text-blue-600 transition">¿Necesitas software o una web para tu negocio?</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">El Ecosistema Digital y de Software para tu Negocio.</p>
+                    </div>
+                </div>
+
+                <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-3.5 py-2 rounded-xl flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition w-full sm:w-auto text-center mt-2 sm:mt-0">
+                    Visitar ↗
+                </span>
+            </a>
+
+            
+
+        </div>
+    </footer>
+
+
+    </div>
+
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+     const firebaseConfig = {
+            apiKey: "AIzaSyAWvzgjOEx4y3NuSXtJOpIhFZ0uD1kMu3M",
+            authDomain: "verifios-market.firebaseapp.com",
+            projectId: "verifios-market",
+            storageBucket: "verifios-market.firebasestorage.app",
+            messagingSenderId: "830441055062",
+            appId: "1:830441055062:web:eb7780ab47d65691bc6cf7"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 🛡️️ FILTRO DE PALABRAS PROHIBIDAS
+        const palabrasProhibidas = [
+            "porno", "sexo", "droga", "cocaína", "marihuana", "arma", "pistola", 
+            "estafa", "falsificado", "hack", "cartilla militar", "pasaporte falso"
+        ];
+
+     // 🔄 CAMBIO DINÁMICO DE TEXTOS Y OPCIONES SEGÚN SI ES PRODUCTO O SERVICIO
+const selectTipo = document.getElementById('tipo');
+if (selectTipo) {
+    selectTipo.addEventListener('change', (e) => {
+        const labelEstado = document.getElementById('label-estado'); 
+        const labelPrecio = document.getElementById('label-precio'); 
+        const inputNombre = document.getElementById('nombre');
+        const inputPrecio = document.getElementById('precio');
+        const selectEstado = document.getElementById('estado'); // El select del estado
+
+        if (e.target.value === 'servicio') {
+            if (labelEstado) labelEstado.textContent = "Modalidad / Disponibilidad del Servicio";
+            if (labelPrecio) labelPrecio.textContent = "Tarifa o Costo por Consulta/Hora ($)";
+            if (inputNombre) inputNombre.placeholder = "Ej: Asesoría Jurídica Civil, Contabilidad...";
+            if (inputPrecio) inputPrecio.placeholder = "30.00";
+            
+            // 🛠️ AQUÍ CAMBIAMOS LAS OPCIONES PARA QUE SEAN DE SERVICIO
+            if (selectEstado) {
+                selectEstado.innerHTML = `
+                    <option value="📍 Presencial / En oficina">📍 Presencial / En oficina</option>
+                    <option value="💻 100% Online / Videollamada">💻 100% Online / Videollamada</option>
+                    <option value="🚗 A domicilio / A escala local">🚗 A domicilio / A escala local</option>
+                    <option value="🕒 Atención 24/7 / Urgencias">🕒 Atención 24/7 / Urgencias</option>
+                `;
+            }
+        } else {
+            if (labelEstado) labelEstado.textContent = "Estado del artículo";
+            if (labelPrecio) labelPrecio.textContent = "Precio ($)";
+            if (inputNombre) inputNombre.placeholder = "Ej: Exprimidor Oster semi-nuevo";
+            if (inputPrecio) inputPrecio.placeholder = "15.00";
+
+            // 📦 AQUÍ RESTAURAMOS LAS OPCIONES PARA PRODUCTOS
+            if (selectEstado) {
+                selectEstado.innerHTML = `
+                    <option value="✨ Nuevo (En caja / Sin uso)">✨ Nuevo (En caja / Sin uso)</option>
+                    <option value="💎 Seminuevo (Poco uso / Excelente estado)">💎 Seminuevo (Poco uso / Excelente estado)</option>
+                    <option value="🔄 Usado (Funcional / Detalles normales)">🔄 Usado (Funcional / Detalles normales)</option>
+                `;
+            }
+        }
+    });
+}
+
+        // Función auxiliar para convertir la foto del cel a Base64
+        const convertirImagenABase64 = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        };
+
+        document.getElementById('userProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const status = document.getElementById('status');
+            let rawWsp = document.getElementById('whatsapp').value.trim();
+            const titulo = document.getElementById('nombre').value.toLowerCase();
+            const archivoInput = document.getElementById('imagen_file').files[0];
+
+            // Capturar los nuevos valores del estado y la descripción
+            const estadoVal = document.getElementById('estado') ? document.getElementById('estado').value : '';
+            const descVal = document.getElementById('descripcion') ? document.getElementById('descripcion').value.trim() : '';
+
+            // Formatear automáticamente el WhatsApp agregando 593 si empieza con 0 o no lo tiene
+            if (rawWsp.startsWith('0')) {
+                rawWsp = '593' + rawWsp.substring(1);
+            } else if (!rawWsp.startsWith('593')) {
+                rawWsp = '593' + rawWsp;
+            }
+            const whatsappUser = rawWsp;
+
+            // 1. Validar filtro de palabras prohibidas
+            const contieneProhibida = palabrasProhibidas.some(palabra => titulo.includes(palabra));
+            if (contieneProhibida) {
+                status.textContent = "❌ Tu anuncio contiene términos no permitidos por seguridad.";
+                status.className = "mt-4 text-center text-xs font-semibold text-red-600";
+                return;
+            }
+
+            // 2. Validar que haya seleccionado un archivo de imagen real
+            if (!archivoInput) {
+                status.textContent = "❌ Debes seleccionar una foto de tu dispositivo.";
+                status.className = "mt-4 text-center text-xs font-semibold text-red-600";
+                return;
+            }
+
+            status.textContent = "Procesando imagen y verificando cupo...";
+            status.className = "mt-4 text-center text-xs font-semibold text-blue-600";
+
+            try {
+                // 3. Candado antispam: Máximo 3 publicaciones activas por número de WhatsApp
+                const snapshot = await db.collection('productos')
+                    .where('whatsapp', '==', whatsappUser)
+                    .where('activo', '==', true)
+                    .get();
+                
+                if (snapshot.size >= 3) {
+                    status.textContent = "⚠️ Ya tienes 3 publicaciones activas con este número. Debes esperar a vender algo o borrar una anterior.";
+                    status.className = "mt-4 text-center text-xs font-semibold text-red-600";
+                    return;
+                }
+
+                // 4. Convertir la foto a Base64
+                const imagenBase64 = await convertirImagenABase64(archivoInput);
+
+                // 5. Guardado automático en Firebase con tu proyecto real
+                await db.collection('productos').add({
+                    tipo: document.getElementById('tipo').value,
+                    nombre: document.getElementById('nombre').value,
+                    estado: estadoVal,               
+                    descripcion: descVal,            
+                    precio: parseFloat(document.getElementById('precio').value),
+                    local_id: "particular_" + whatsappUser,
+                    whatsapp: whatsappUser,
+                    imagen_url: imagenBase64,
+                    fecha_creacion: firebase.firestore.FieldValue.serverTimestamp(),
+                    activo: true
+                });
+
+                status.textContent = "🎉 ¡Listo! Tu anuncio ya está publicado y visible en la vitrina.";
+                status.className = "mt-4 text-center text-xs font-semibold text-emerald-600";
+                document.getElementById('userProductForm').reset();
+
+            } catch (error) {
+                status.textContent = "❌ Ocurrió un error: " + error.message;
+                status.className = "mt-4 text-center text-xs font-semibold text-red-600";
+            }
+        });
+    </script>
+
+
+</body>
+</html>
