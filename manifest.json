@@ -1,6 +1,6 @@
  "name": "VerifiOS Market",
   "short_name": "VerifiOS Market",
-  "start_url": "vitri.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#090d16",
   "theme_color": "#090d16",
