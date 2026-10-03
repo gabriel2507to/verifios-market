@@ -95,14 +95,15 @@
                     <p class="flex items-start gap-1.5"><span>⚡</span> <span>1️⃣ Desconfía de ofertas exageradamente baratas.</span></p>
                     <p class="flex items-start gap-1.5"><span>🤝</span> <span>2️⃣ Revisa siempre el artículo en persona (lugares públicos).</span></p>
                     <p class="flex items-start gap-1.5"><span>🚫</span> <span>3️⃣ Cero pagos totales por adelantado.</span></p>
+                    <h2 class="text-xl sm:text-2xl font-extrabold mt-1">Lo que buscas, directo al WhatsApp 💬</h2>
+        <p class="text-xs text-blue-200 font-medium">💡 Consejo: Acuerda tratos en persona y evita pagos totales por adelantado.</p>
+        
                 </div>
             </details>
         </div>
 
-       <span class="bg-white/20 text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">Compra y Vende. 🛍️</span>
-        <h2 class="text-xl sm:text-2xl font-extrabold mt-1">Lo que buscas, directo al WhatsApp 💬</h2>
-        <p class="text-xs text-blue-200 font-medium">💡 Consejo: Acuerda tratos en persona y evita pagos totales por adelantado.</p>
-        
+    
+       
     </div>
 
     <!-- Botones de Categoría con Estado Activo Visual (Dentro del flujo correcto del banner) -->
@@ -301,20 +302,25 @@
         let categoriaActual = localStorage.getItem('verifios_categoria') || 'todos';
         let soloFavoritosActivo = localStorage.getItem('verifios_fav_activo') === 'true';
 
-        async function cargarVitrina() {
-            const grid = document.getElementById('productos-grid');
-            try {
-                const snapshot = await db.collection('productos').where('activo', '==', true).get();
-                todosLosProductos = [];
-                snapshot.forEach(doc => {
-                    todosLosProductos.push({ id: doc.id, ...doc.data() });
-                });
-                renderizarProductos(todosLosProductos);
-            } catch (error) {
-                console.error("Error al cargar:", error);
-                grid.innerHTML = '<p class="text-center col-span-full text-red-500 text-sm">Error al conectar con la base de datos.</p>';
-            }
-        }
+    async function cargarVitrina() {
+    const grid = document.getElementById('productos-grid');
+    try {
+        const snapshot = await db.collection('productos').where('activo', '==', true).get();
+        todosLosProductos = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            todosLosProductos.push({ 
+                id: doc.id, 
+                ...data, 
+                precio: Number(data.precio) || 0 // <--- ¡Forzamos a número aquí mismo!
+            });
+        });
+        renderizarProductos(todosLosProductos);
+    } catch (error) {
+        console.error("Error al cargar:", error);
+        grid.innerHTML = '<p class="text-center col-span-full text-red-500 text-sm">Error al conectar con la base de datos.</p>';
+    }
+}
 
 
 function renderizarProductos(productos) {
