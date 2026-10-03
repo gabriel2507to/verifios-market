@@ -69,51 +69,52 @@
     </header>
 
 <!-- Contenedor Principal de la Página -->
-    <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
+<main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full">
 
-   <!-- Banner Principal Mejorado -->
-<div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white mb-8 shadow-lg shadow-blue-500/10 flex flex-col justify-between relative overflow-hidden">
-    <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-    
-    <div class="relative z-10 flex flex-col items-start gap-4">
+    <!-- Banner Principal Mejorado -->
+    <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white mb-8 shadow-lg shadow-blue-500/10 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
         
-        <!-- Contenedor superior con Botón de instalar y Tips de seguridad sutiles -->
-        <div class="flex flex-wrap items-center gap-2">
-            <button id="btnInstalarApp" style="display: none;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-full transition shadow-sm items-center gap-1.5">
-                📲 Instalar VerifiOS Market
-            </button>
+        <div class="relative z-10 flex flex-col items-start gap-4">
             
-            <!-- Botón sutil de Tips Antiestafa con estilo alegre -->
-            <details class="relative group">
-                <summary class="list-none cursor-pointer bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 font-semibold text-[11px] px-3 py-1.5 rounded-full backdrop-blur-sm transition flex items-center gap-1.5 border border-amber-400/30">
-                    🛡️ ¡Compra Seguro! ✨
-                </summary>
-                <div class="absolute left-0 mt-2 w-72 p-3.5 bg-slate-900/95 backdrop-blur-md text-slate-200 text-xs rounded-2xl shadow-2xl border border-slate-800 z-50 space-y-2">
-                    <p class="font-bold text-amber-300 border-b border-slate-800 pb-1 flex items-center gap-1.5">
-                        💡 Reglas de oro en Cuenca:
-                    </p>
-                    <p class="flex items-start gap-1.5"><span>⚡</span> <span>1️⃣ Desconfía de ofertas exageradamente baratas.</span></p>
-                    <p class="flex items-start gap-1.5"><span>🤝</span> <span>2️⃣ Revisa siempre el artículo en persona (lugares públicos).</span></p>
-                    <p class="flex items-start gap-1.5"><span>🚫</span> <span>3️⃣ Cero pagos totales por adelantado.</span></p>
-                    <h2 class="text-xl sm:text-2xl font-extrabold mt-1">Lo que buscas, directo al WhatsApp 💬</h2>
-        <p class="text-xs text-blue-200 font-medium">💡 Consejo: Acuerda tratos en persona y evita pagos totales por adelantado.</p>
-        
-                </div>
-            </details>
+            <!-- Contenedor superior con Botón de instalar y Tips de seguridad sutiles -->
+            <div class="flex flex-wrap items-center gap-2">
+                <button id="btnInstalarApp" style="display: none;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-full transition shadow-sm items-center gap-1.5">
+                    📲 Instalar VerifiOS Market.
+                </button>
+                
+                <!-- Botón sutil de Tips Antiestafa con estilo alegre -->
+                <details class="relative group">
+                    <summary class="list-none cursor-pointer bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 font-semibold text-[11px] px-3 py-1.5 rounded-full backdrop-blur-sm transition flex items-center gap-1.5 border border-amber-400/30">
+                        🛡️ ¡Compra Seguro! ✨
+                    </summary>
+                    <div class="absolute left-0 mt-2 w-72 p-3.5 bg-slate-900/95 backdrop-blur-md text-slate-200 text-xs rounded-2xl shadow-2xl border border-slate-800 z-50 space-y-2">
+                        <p class="font-bold text-amber-300 border-b border-slate-800 pb-1 flex items-center gap-1.5">
+                            💡 Reglas de oro en Cuenca:
+                        </p>
+                        <p class="flex items-start gap-1.5"><span>⚡</span> <span>1️⃣ Desconfía de ofertas exageradamente baratas.</span></p>
+                        <p class="flex items-start gap-1.5"><span>🤝</span> <span>2️⃣ Revisa siempre el artículo en persona (lugares públicos).</span></p>
+                        <p class="flex items-start gap-1.5"><span>🚫</span> <span>3️⃣ Cero pagos totales por adelantado.</span></p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Título y subtítulo principal del Banner (Ahora fuera del details) -->
+            <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold mt-1">Lo que buscas, directo al WhatsApp 💬</h2>
+                <p class="text-xs text-blue-200 font-medium mt-1">💡 Consejo: Acuerda tratos en persona y evita pagos totales por adelantado.</p>
+            </div>
+
+            <!-- Botones de Categoría con Estado Activo Visual -->
+            <div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10 mt-2 w-full">
+                <button onclick="filtrarCategoria('todos', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-semibold transition bg-white text-blue-900 shadow-sm">Todos</button>
+                <button onclick="filtrarCategoria('producto', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">📦 Productos</button>
+                <button onclick="filtrarCategoria('servicio', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🛠️ Servicios</button>
+            </div>
+
         </div>
-
-    
-       
     </div>
-
-    <!-- Botones de Categoría con Estado Activo Visual (Dentro del flujo correcto del banner) -->
-    <div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10 mt-4">
-        <button onclick="filtrarCategoria('todos', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-semibold transition bg-white text-blue-900 shadow-sm">Todos</button>
-        <button onclick="filtrarCategoria('producto', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">📦 Productos</button>
-        <button onclick="filtrarCategoria('servicio', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🛠️ Servicios</button>
-    </div>
-</div>
-<!-- Fin del Banner Principal -->
+    <!-- Fin del Banner Principal -->
 
 <!-- Filtro Rápido por Rango de Precios (NUEVO) -->
 <div class="bg-white p-3 rounded-2xl border border-slate-200 mb-4 shadow-xs flex flex-wrap items-center gap-3">
