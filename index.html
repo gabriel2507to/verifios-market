@@ -369,9 +369,9 @@ function renderizarProductos(productos) {
 
         if (esSolicitud) {
             badgeColor = "bg-amber-50 text-amber-800 border-amber-300";
-            badgeText = "🔍 Se Busca / Comunidad";
+            badgeText = "🔍 Se Busca";
             btnColor = "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold";
-            btnTexto = "Yo te ayudo / Ofrecer";
+            btnTexto = "Yo te ayudo"; // Texto acortado para que quepa perfecto
             iconoBtn = "💬";
         } else if (p.tipo === 'servicio') { 
             badgeColor = "bg-purple-50 text-purple-700 border-purple-200"; 
@@ -384,7 +384,8 @@ function renderizarProductos(productos) {
         const estadoVal = p.estado ? p.estado : '';
         const descVal = p.descripcion ? p.descripcion : '';
 
-        const badgeEstadoHtml = estadoVal ? `<span class="bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block">✨ ${estadoVal}</span>` : '';
+        // Si es solicitud, evitamos duplicar el texto en el badge interno
+        const badgeEstadoHtml = (!esSolicitud && estadoVal) ? `<span class="bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block">✨ ${estadoVal}</span>` : '';
         const descHtml = descVal ? `<p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${descVal}</p>` : '';
 
         // Texto adaptado para WhatsApp dependiendo si es producto, servicio o solicitud de comunidad
@@ -436,7 +437,7 @@ function renderizarProductos(productos) {
                         <div class="flex items-center justify-end sm:justify-center gap-2 w-full sm:w-auto mt-2 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex-shrink-0">
                             <a href="${whatsappReporteLink}" target="_blank" class="w-9 h-9 sm:w-8 sm:h-8 bg-slate-100 hover:bg-amber-50 rounded-full flex items-center justify-center text-amber-600 transition" title="Reportar publicación">⚠️</a>
                             <button onclick="toggleFavorito('${idUnico}')" class="w-9 h-9 sm:w-8 sm:h-8 bg-slate-100 hover:bg-rose-50 rounded-full flex items-center justify-center text-rose-500 transition" title="Guardar en favoritos">❤️</button>
-                            <button onclick="compartirAnuncio('${p.nombre}', '${p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 sm:p-2 rounded-xl transition" title="Compartir enlace">🔗</button>
+                            <button onclick="compartirAnuncio('${p.nombre}', '${esSolicitud ? 'Se Busca' : p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 sm:p-2 rounded-xl transition" title="Compartir enlace">🔗</button>
                             <a href="${whatsappLink}" target="_blank" class="${btnColor} text-white font-semibold text-xs py-2 px-3 rounded-xl transition duration-200 shadow-sm flex items-center justify-center gap-1.5 flex-grow sm:flex-grow-0 whitespace-nowrap">
                                 <span>${iconoBtn}</span> ${btnTexto}
                             </a>
@@ -478,7 +479,7 @@ function renderizarProductos(productos) {
                                 </div>
                                 <div class="flex items-center gap-1.5">
                                     <!-- Botón Compartir enlace -->
-                                    <button onclick="compartirAnuncio('${p.nombre}', '${esSolicitud ? 'Comunidad Se Busca' : p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 rounded-xl transition" title="Compartir enlace">
+                                    <button onclick="compartirAnuncio('${p.nombre}', '${esSolicitud ? 'Se Busca' : p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 rounded-xl transition" title="Compartir enlace">
                                         🔗
                                     </button>
                                     <a href="${whatsappLink}" target="_blank" class="${btnColor} text-white font-semibold text-xs py-2 px-3 rounded-xl transition duration-200 shadow-sm flex items-center gap-1.5 whitespace-nowrap">
