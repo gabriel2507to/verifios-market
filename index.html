@@ -98,71 +98,71 @@
             </details>
         </div>
 
-        <span class="bg-white/20 text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">Compra y Vende. 🛍️</span>
+       <span class="bg-white/20 text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">Compra y Vende. 🛍️</span>
         <h2 class="text-xl sm:text-2xl font-extrabold mt-1">Lo que buscas, directo al WhatsApp 💬</h2>
         <p class="text-xs text-blue-200 font-medium">💡 Consejo: Acuerda tratos en persona y evita pagos totales por adelantado.</p>
         
     </div>
+
+    <!-- Botones de Categoría con Estado Activo Visual (Dentro del flujo correcto del banner) -->
+    <div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10 mt-4">
+        <button onclick="filtrarCategoria('todos', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-semibold transition bg-white text-blue-900 shadow-sm">Todos</button>
+        <button onclick="filtrarCategoria('producto', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">📦 Productos</button>
+        <button onclick="filtrarCategoria('servicio', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🛠️ Servicios</button>
+    </div>
 </div>
-            
-            <!-- Botones de Categoría con Estado Activo Visual -->
-            <div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10">
-                <button onclick="filtrarCategoria('todos', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-semibold transition bg-white text-blue-900 shadow-sm">Todos</button>
-                <button onclick="filtrarCategoria('producto', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">📦 Productos</button>
-                <button onclick="filtrarCategoria('servicio', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🛠️ Servicios</button>
-            </div>
+<!-- Fin del Banner Principal -->
+
+<!-- Filtro Rápido por Rango de Precios (NUEVO) -->
+<div class="bg-white p-3 rounded-2xl border border-slate-200 mb-4 shadow-xs flex flex-wrap items-center gap-3">
+    <span class="text-xs font-semibold text-slate-500">💵 Filtrar por precio:</span>
+    <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+        <div class="relative w-full">
+            <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400">$</span>
+            <input type="number" id="precio-min" placeholder="Mín" oninput="aplicarFiltros()" class="w-full pl-6 pr-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
+        </div>
+        <span class="text-xs text-slate-400">-</span>
+        <div class="relative w-full">
+            <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400">$</span>
+            <input type="number" id="precio-max" placeholder="Máx" oninput="aplicarFiltros()" class="w-full pl-6 pr-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
+        </div>
+    </div>
+</div>
+
+<!-- Barra de Contador y Ordenamiento -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-3">
+    <p id="contador-anuncios" class="text-xs font-medium text-slate-500">Cargando publicaciones...</p>
+    
+    <!-- Selector de Ordenamiento y Controles -->
+    <div class="flex items-center flex-wrap gap-2 w-full sm:w-auto">
+        <!-- Botones de Cambio de Vista (NUEVO) -->
+        <div class="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-xl shadow-xs">
+            <button onclick="cambiarVista('grid')" class="p-1 rounded-lg text-xs hover:bg-slate-100 transition" title="Vista de Cuadrícula">🔲</button>
+            <button onclick="cambiarVista('list')" class="p-1 rounded-lg text-xs hover:bg-slate-100 transition" title="Vista de Lista">📋</button>
         </div>
 
-        <!-- Filtro Rápido por Rango de Precios (NUEVO) -->
-        <div class="bg-white p-3 rounded-2xl border border-slate-200 mb-4 shadow-xs flex flex-wrap items-center gap-3">
-            <span class="text-xs font-semibold text-slate-500">💵 Filtrar por precio:</span>
-            <div class="flex items-center gap-2 flex-1 min-w-[200px]">
-                <div class="relative w-full">
-                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400">$</span>
-                    <input type="number" id="precio-min" placeholder="Mín" oninput="aplicarFiltros()" class="w-full pl-6 pr-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
-                </div>
-                <span class="text-xs text-slate-400">-</span>
-                <div class="relative w-full">
-                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs text-slate-400">$</span>
-                    <input type="number" id="precio-max" placeholder="Máx" oninput="aplicarFiltros()" class="w-full pl-6 pr-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
-                </div>
-            </div>
-        </div>
+        <span class="text-xs text-slate-400">Ordenar:</span>
+        <select id="orden-select" onchange="cambiarOrden()" class="text-xs bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-xs cursor-pointer">
+            <option value="recientes">✨ Más recientes</option>
+            <option value="precio-menor">📉 Menor precio</option>
+            <option value="precio-mayor">📈 Mayor precio</option>
+        </select>
+        <!-- Filtro de Favoritos -->
+        <button onclick="alternarFiltroFavoritos(event)" id="btn-favoritos-filtro" class="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-xl font-medium hover:bg-slate-100 transition shadow-xs flex items-center gap-1">
+            ❤️ <span id="txt-fav-filtro">Favoritos</span>
+        </button>
+    </div>
+</div>
 
-        <!-- Barra de Contador y Ordenamiento -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1 gap-3">
-            <p id="contador-anuncios" class="text-xs font-medium text-slate-500">Cargando publicaciones...</p>
-            
-            <!-- Selector de Ordenamiento y Controles -->
-            <div class="flex items-center flex-wrap gap-2 w-full sm:w-auto">
-                <!-- Botones de Cambio de Vista (NUEVO) -->
-                <div class="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-xl shadow-xs">
-                    <button onclick="cambiarVista('grid')" class="p-1 rounded-lg text-xs hover:bg-slate-100 transition" title="Vista de Cuadrícula">🔲</button>
-                    <button onclick="cambiarVista('list')" class="p-1 rounded-lg text-xs hover:bg-slate-100 transition" title="Vista de Lista">📋</button>
-                </div>
-
-                <span class="text-xs text-slate-400">Ordenar:</span>
-                <select id="orden-select" onchange="cambiarOrden()" class="text-xs bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-xs cursor-pointer">
-                    <option value="recientes">✨ Más recientes</option>
-                    <option value="precio-menor">📉 Menor precio</option>
-                    <option value="precio-mayor">📈 Mayor precio</option>
-                </select>
-                <!-- Filtro de Favoritos -->
-                <button onclick="alternarFiltroFavoritos(event)" id="btn-favoritos-filtro" class="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-xl font-medium hover:bg-slate-100 transition shadow-xs flex items-center gap-1">
-                    ❤️ <span id="txt-fav-filtro">Favoritos</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Cuadrícula de Productos -->
-        <div id="productos-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Estado de carga skeleton -->
-            <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200 animate-pulse">
-                <div class="bg-slate-200 h-44 rounded-xl mb-3"></div>
-                <div class="bg-slate-200 h-4 w-3/4 rounded mb-2"></div>
-                <div class="bg-slate-200 h-6 w-1/2 rounded"></div>
-            </div>
-        </div>
+<!-- Cuadrícula de Productos -->
+<div id="productos-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- Estado de carga skeleton -->
+    <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200 animate-pulse">
+        <div class="bg-slate-200 h-44 rounded-xl mb-3"></div>
+        <div class="bg-slate-200 h-4 w-3/4 rounded mb-2"></div>
+        <div class="bg-slate-200 h-6 w-1/2 rounded"></div>
+    </div>
+</div>
     </main>
 
     
