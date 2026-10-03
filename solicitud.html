@@ -19,28 +19,34 @@
             <p class="text-xs text-slate-500 mt-1">Sube la foto de lo que quieres mandar a hacer o encontrar en Cuenca y escribe tu duda.</p>
         </div>
 
-        <form id="userSearchForm" class="space-y-4">
+    <form id="userSearchForm" class="space-y-4">
             
-            <!-- 1. Lo que busca la gente (Directo y libre) -->
+            <!-- 1. Título breve o pregunta principal -->
             <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">¿Qué buscas o quién te hace esto?</label>
-                <textarea id="nombre" rows="3" placeholder="Ej: ¿Alguien que me fabrique una repisa igual a esta o sabe dónde la venden?" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"></textarea>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Título o qué necesitas saber</label>
+                <input type="text" id="nombre" placeholder="Ej: ¿Alguien sabe dónde venden o fabrican esto en Cuenca?" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
 
-            <!-- 2. WhatsApp -->
+            <!-- 2. Descripción o detalles adicionales de la ayuda -->
             <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Tu WhatsApp para que te escriban</label>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Detalles de tu duda (Opcional o recomendado)</label>
+                <textarea id="descripcion" rows="2" placeholder="Ej: Vi esta foto y necesito mandar a hacer algo similar para mi sala, si alguien conoce un taller avísenme." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"></textarea>
+            </div>
+
+            <!-- 3. WhatsApp -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Tu WhatsApp para que te respondan</label>
                 <input type="text" id="whatsapp" placeholder="0987654321" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
 
-            <!-- 3. La foto obligatoria -->
+            <!-- 4. La foto obligatoria de referencia -->
             <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Foto de referencia (Sube 1 imagen)</label>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Foto de referencia (Sube la imagen)</label>
                 <input type="file" id="imagen_file" accept="image/png, image/jpeg, image/webp" required class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer">
             </div>
 
             <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 p-3.5 rounded-xl font-bold text-sm transition shadow-md shadow-amber-500/20">
-                🚀 Publicar en "Se Busca"
+                🚀 Pedir ayuda a la comunidad
             </button>
             
             <div id="status"></div>
@@ -62,7 +68,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script>
-        const firebaseConfig = {
+      const firebaseConfig = {
             apiKey: "AIzaSyAWvzgjOEx4y3NuSXtJOpIhFZ0uD1kMu3M",
             authDomain: "verifios-market.firebaseapp.com",
             projectId: "verifios-market",
@@ -107,12 +113,12 @@
             try {
                 const imagenBase64 = await convertirImagenABase64(archivoInput);
 
-                // Se guarda directo en tu misma base de datos con tipo "solicitud"
+                // Se guarda en Firebase capturando el título y la descripción por separado
                 await db.collection('productos').add({
                     tipo: "solicitud",
                     nombre: document.getElementById('nombre').value,
                     estado: "🔍 Se Busca / Comunidad",
-                    descripcion: "",
+                    descripcion: document.getElementById('descripcion').value,
                     precio: 0,
                     local_id: "particular_" + rawWsp,
                     whatsapp: rawWsp,
