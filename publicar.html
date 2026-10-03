@@ -92,34 +92,48 @@
             <p class="text-[11px] text-slate-400">@ 2026 Derechos Reservados VerifiOS Market • Cuenca, Ecuador</p>
         </div>
 
-<!-- Footer Oficial de VerifiOS Market con Publicidad Sutil Integrada -->
-    <footer class="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 text-center text-slate-500 text-xs shadow-md">
-        <div class="flex flex-col items-center gap-4">
+
+<div class="mt-4 text-center">
+    <a href="index.html" class="inline-block w-full py-2 px-4 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+        Regresar a la página principal
+    </a>
+</div>
+        
+<!-- Footer Oficial de VerifiOS Market -->
+<footer class="bg-white border-t border-slate-200 mt-auto py-8 px-4 text-center text-slate-500 text-xs">
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-4">
+        
+        <!-- Tarjeta Publicitaria Sutil de VerifiOS (Intacta) -->
+        <a href="https://verifios.verificarecuador.com" target="_blank" class="w-full max-w-md bg-slate-50 border border-slate-200 hover:border-blue-300 rounded-2xl p-3.5 flex items-center justify-between gap-3 text-left shadow-2xs transition group block">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-xs group-hover:scale-105 transition">
+                💻
+            </div>
+            <div class="flex-grow min-w-0">
+                <p class="font-bold text-slate-800 text-xs truncate group-hover:text-blue-600 transition">¿Necesitas software o una web para tu negocio?</p>
+                <p class="text-[11px] text-slate-500 truncate">El Ecosistema Digital y de Software para tu Negocio.</p>
+            </div>
+            <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-xl flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition">
+                Visitar ↗
+            </span>
+        </a>
+
+        <!-- Textos y enlaces de administración y soporte -->
+        <div>
+            <p class="font-medium text-slate-500">VerifiOS Market • Espacio de anuncios libres. Sin cobros de comisiones.</p>
+            <p class="text-[11px] text-slate-400">@ 2026 Derechos Reservados VerifiOS Market • Cuenca, Ecuador</p>
             
-            <!-- Tarjeta Publicitaria Sutil de VerifiOS -->
-            <a href="https://verifios.verificarecuador.com" target="_blank" class="w-full bg-slate-50 border border-slate-200 hover:border-blue-300 rounded-2xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left transition group block shadow-2xs">
-                <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-xs group-hover:scale-105 transition">
-                        💻
-                    </div>
-                    <div class="min-w-0 text-center sm:text-left">
-                        <p class="font-bold text-slate-800 text-xs group-hover:text-blue-600 transition">¿Necesitas software o una web para tu negocio?</p>
-                        <p class="text-[11px] text-slate-500 mt-0.5">El Ecosistema Digital y de Software para tu Negocio.</p>
-                    </div>
-                </div>
-
-                <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-3.5 py-2 rounded-xl flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition w-full sm:w-auto text-center mt-2 sm:mt-0">
-                    Visitar ↗
-                </span>
-            </a>
-
-            
-
+            <!-- Zona de accesos admin y soporte -->
+            <div class="mt-2 flex items-center justify-center gap-3">
+                <a href="https://wa.me/593992661432?text=¡Hola!%20Vengo%20de%20VerifiOS%20Market%20y%20necesito%20soporte%20o%20reportar%20un%20inconveniente." target="_blank" class="text-xs text-slate-400 hover:text-emerald-600 transition inline-flex items-center gap-1 font-medium">
+                    💬 Soporte técnico / Reportar error
+                </a>
+                <span class="text-slate-300">•</span>
+                <a href="admin.html" class="text-xs text-slate-300 hover:text-slate-600 transition p-2 inline-block" title="Panel de Administración">🔐</a>
+            </div>
         </div>
-    </footer>
-
 
     </div>
+</footer>
 
     <!-- Firebase SDK Compat -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -263,8 +277,8 @@ if (selectTipo) {
                     activo: true
                 });
 
-                status.textContent = "🎉 ¡Listo! Tu anuncio ya está publicado y visible en la vitrina.";
-                status.className = "mt-4 text-center text-xs font-semibold text-emerald-600";
+              status.textContent = "🎉 ¡Listo! Tu anuncio ya está publicado y visible en la vitrina. 💡 ¿Ya vendiste tu producto? Escríbenos al WhatsApp de soporte para retirar tu anuncio.";
+                status.className = "mt-4 text-center text-xs font-semibold text-emerald-600 leading-relaxed";
                 document.getElementById('userProductForm').reset();
 
             } catch (error) {
