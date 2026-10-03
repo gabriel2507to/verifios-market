@@ -110,11 +110,12 @@
             </div>
 
             <!-- Botones de Categoría con Estado Activo Visual -->
-            <div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10 mt-2 w-full">
-                <button onclick="filtrarCategoria('todos', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-semibold transition bg-white text-blue-900 shadow-sm">Todos</button>
-                <button onclick="filtrarCategoria('producto', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">📦 Productos</button>
-                <button onclick="filtrarCategoria('servicio', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🛠️ Servicios</button>
-            </div>
+<div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10 mt-2 w-full">
+    <button onclick="filtrarCategoria('todos', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-semibold transition bg-white text-blue-900 shadow-sm">Todos</button>
+    <button onclick="filtrarCategoria('producto', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">📦 Productos</button>
+    <button onclick="filtrarCategoria('servicio', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🛠️ Servicios</button>
+    <button onclick="filtrarCategoria('solicitud', event)" class="cat-btn text-xs px-3.5 py-2 rounded-xl font-medium transition bg-transparent hover:bg-white/20 text-white">🔍 Se Busca/Necesita</button>
+</div>
 
         </div>
     </div>
@@ -360,6 +361,7 @@ function renderizarProductos(productos) {
 
     productos.forEach(p => {
         const esSolicitud = p.tipo === 'solicitud';
+        const esServicio = p.tipo === 'servicio';
 
         let badgeColor = "bg-blue-50 text-blue-700 border-blue-200";
         let badgeText = "🛍️ Producto";
@@ -367,32 +369,38 @@ function renderizarProductos(productos) {
         let btnTexto = "Comprar";
         let iconoBtn = "⚡";
 
+        // Clases dinámicas de borde y hover según el tipo
+        let borderColor = "border-slate-200";
+        let hoverBorderColor = "hover:border-emerald-400 hover:ring-1 hover:ring-emerald-300/50";
+
         if (esSolicitud) {
             badgeColor = "bg-amber-50 text-amber-800 border-amber-300";
             badgeText = "🔍 Se Busca";
             btnColor = "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold";
-            btnTexto = "Yo te ayudo"; // Texto acortado para que quepa perfecto
+            btnTexto = "Yo te ayudo"; 
             iconoBtn = "💬";
-        } else if (p.tipo === 'servicio') { 
+            borderColor = "border-amber-300 bg-amber-50/20";
+            hoverBorderColor = "hover:border-amber-400 hover:ring-1 hover:ring-amber-300/50";
+        } else if (esServicio) { 
             badgeColor = "bg-purple-50 text-purple-700 border-purple-200"; 
             badgeText = "🏷️ Servicio"; 
             btnColor = "bg-purple-600 hover:bg-purple-700";
             btnTexto = "Consultar / Agendar";
             iconoBtn = "📅";
+            borderColor = "border-slate-200";
+            hoverBorderColor = "hover:border-purple-400 hover:ring-1 hover:ring-purple-300/50";
         }
 
         const estadoVal = p.estado ? p.estado : '';
         const descVal = p.descripcion ? p.descripcion : '';
 
-        // Si es solicitud, evitamos duplicar el texto en el badge interno
         const badgeEstadoHtml = (!esSolicitud && estadoVal) ? `<span class="bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-block">✨ ${estadoVal}</span>` : '';
         const descHtml = descVal ? `<p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${descVal}</p>` : '';
 
-        // Texto adaptado para WhatsApp dependiendo si es producto, servicio o solicitud de comunidad
         let textoMensaje = '';
         if (esSolicitud) {
             textoMensaje = `¡Hola! 👋 Vi tu publicación de *Se Busca* en VerifiOS Market 🔍\n\n📝 Petición: ${p.nombre}\n\n¡Te escribo porque te puedo ayudar o sé dónde lo consigues!`;
-        } else if (p.tipo === 'servicio') {
+        } else if (esServicio) {
             textoMensaje = `¡Hola! 👋 Vi su servicio en *VerifiOS Market* y me interesa agendar una consulta 📅\n\n🛠 Servicio: ${p.nombre}${estadoVal ? `\n✨ Modalidad: ${estadoVal}` : ''}${descVal ? `\n📝 Detalle: ${descVal}` : ''}\n💵 Tarifa: $${Number(p.precio).toFixed(2)}\n\n¿Me cuenta cuál es su disponibilidad por favor?`;
         } else {
             textoMensaje = `¡Hola! 👋 Vi esto en *VerifiOS Market* y me interesa 🔥\n\n📍 Tipo: ${badgeText}\n📦 Artículo: ${p.nombre}${estadoVal ? `\n✨ Estado: ${estadoVal}` : ''}${descVal ? `\n📝 Detalles: ${descVal}` : ''}\n💵 Precio: $${Number(p.precio).toFixed(2)}\n\n🛒 ¡Quiero comprarlo! ¿Me confirmas los métodos de pago?`;
@@ -406,19 +414,15 @@ function renderizarProductos(productos) {
         }
         
         const whatsappLink = `https://wa.me/${numeroFinal}?text=${encodeURIComponent(textoMensaje)}`;
-
-        // Enlace de WhatsApp para reportes directo al admin (593992661432)
         const textoReporte = `🚨 Hola Administrador, quiero reportar esta publicación sospechosa en VerifiOS Market:\n\n📌 Título: ${p.nombre}\n💵 Precio: $${Number(p.precio).toFixed(2)}\n🆔 ID: ${p.id || 'N/D'}\n\nMotivo del reporte: `;
         const whatsappReporteLink = `https://wa.me/593992661432?text=${encodeURIComponent(textoReporte)}`;
 
-        // Identificador único para favoritos y compartir
         const idUnico = p.id || p.nombre;
         
         let card = '';
         if (modoVista === 'list') {
-            // Diseño en Tarjeta de Lista Compacta optimizada para móvil
             card = `
-                <div id="card-${p.id}" class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border ${esSolicitud ? 'border-amber-300 bg-amber-50/20' : 'border-slate-200'} flex flex-col p-3.5 group">
+                <div id="card-${p.id}" class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border ${borderColor} ${hoverBorderColor} flex flex-col p-3.5 group">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                         <div class="relative w-full sm:w-24 h-36 sm:h-24 flex-shrink-0 bg-slate-100 rounded-xl overflow-hidden">
                             <img src="${p.imagen_url}" alt="${p.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&q=80&w=400'">
@@ -446,19 +450,16 @@ function renderizarProductos(productos) {
                 </div>
             `;
         } else {
-            // Diseño en Cuadrícula / Grid optimizado para móvil
             card = `
-                <div id="card-${p.id}" class="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border ${esSolicitud ? 'border-amber-300 ring-1 ring-amber-200/50' : 'border-slate-200'} flex flex-col group">
+                <div id="card-${p.id}" class="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border ${borderColor} ${hoverBorderColor} flex flex-col group">
                     <div class="relative h-48 sm:h-44 bg-slate-100 overflow-hidden">
                         <img src="${p.imagen_url}" alt="${p.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&q=80&w=400'">
                         <span class="absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${badgeColor} bg-white/90 backdrop-blur-sm">${badgeText}</span>
                         
-                        <!-- Botón de Reportar (Alerta) -->
                         <a href="${whatsappReporteLink}" target="_blank" class="absolute top-2 right-12 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-amber-600 shadow-sm hover:scale-110 transition" title="Reportar publicación">
                             ⚠️
                         </a>
 
-                        <!-- Botón de Favorito (Corazón) -->
                         <button onclick="toggleFavorito('${idUnico}')" class="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-rose-500 shadow-sm hover:scale-110 transition" title="Guardar en favoritos">
                             ❤️
                         </button>
@@ -478,7 +479,6 @@ function renderizarProductos(productos) {
                                     <span class="text-slate-900 font-extrabold ${esSolicitud ? 'text-xs text-amber-700' : 'text-base'}">${esSolicitud ? '💬 Comunidad' : '$' + Number(p.precio).toFixed(2)}</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <!-- Botón Compartir enlace -->
                                     <button onclick="compartirAnuncio('${p.nombre}', '${esSolicitud ? 'Se Busca' : p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 rounded-xl transition" title="Compartir enlace">
                                         🔗
                                     </button>
