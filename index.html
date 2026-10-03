@@ -69,24 +69,39 @@
     </header>
 
 
-
-    <!-- Contenido Principal -->
-    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
- 
-        <!-- Banner Principal Mejorado -->
+<!-- Banner Principal Mejorado -->
         <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white mb-8 shadow-lg shadow-blue-500/10 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="relative z-10">
+            <div class="relative z-10 flex flex-col items-start gap-3">
 
-       <!-- Botón de instalar PWA (inicialmente oculto) -->
-<button id="btnInstalar" style="display: display;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-xl transition shadow-sm items-center gap-1.5">
-    📲 Instalar App
-</button>
+        <!-- Contenedor superior con Botón de instalar y Tips de seguridad sutiles -->
+        <div class="flex flex-wrap items-center gap-2">
+            <button id="btnInstalarApp" style="display: none;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-full transition shadow-sm items-center gap-1.5">
+                📲 Instalar VerifiOS Market
+            </button>
+            
+            <!-- Botón sutil de Tips Antiestafa con estilo alegre -->
+            <details class="relative group">
+                <summary class="list-none cursor-pointer bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 font-semibold text-[11px] px-3 py-1.5 rounded-full backdrop-blur-sm transition flex items-center gap-1.5 border border-amber-400/30">
+                    🛡️ ¡Compra Seguro! ✨
+                </summary>
+                <div class="absolute left-0 mt-2 w-72 p-3.5 bg-slate-900/95 backdrop-blur-md text-slate-200 text-xs rounded-2xl shadow-2xl border border-slate-800 z-50 space-y-2">
+                    <p class="font-bold text-amber-300 border-b border-slate-800 pb-1 flex items-center gap-1.5">
+                        💡 Reglas de oro en Cuenca:
+                    </p>
+                    <p class="flex items-start gap-1.5"><span>⚡</span> <span>1️⃣ Desconfía de ofertas exageradamente baratas.</span></p>
+                    <p class="flex items-start gap-1.5"><span>🤝</span> <span>2️⃣ Revisa siempre el artículo en persona (lugares públicos).</span></p>
+                    <p class="flex items-start gap-1.5"><span>🚫</span> <span>3️⃣ Cero pagos totales por adelantado.</span></p>
+                </div>
+            </details>
+        </div>
 
                 <span class="bg-white/20 text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">Compra y Vende. 🛍️</span>
                 <h2 class="text-xl sm:text-2xl font-extrabold mt-2">Lo que buscas, directo al WhatsApp 💬</h2>
+                <p class="text-xs text-blue-200 mt-2 font-medium">💡 Consejo: Acuerda tratos en persona y evita pagos totales por adelantado.</p>
                 
             </div>
+   
             
             <!-- Botones de Categoría con Estado Activo Visual -->
             <div class="flex flex-wrap gap-2 relative z-10 bg-black/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10">
@@ -262,9 +277,7 @@
 </footer>
        
 
-    </div>
-</footer>
-
+  
     <!-- Firebase SDK Compat -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -365,40 +378,13 @@ function renderizarProductos(productos) {
         
         const whatsappLink = `https://wa.me/${numeroFinal}?text=${encodeURIComponent(textoMensaje)}`;
 
+        // Enlace de WhatsApp para reportes directo al admin (593992661432)
+        const textoReporte = `🚨 Hola Administrador, quiero reportar esta publicación sospechosa en VerifiOS Market:\n\n📌 Título: ${p.nombre}\n💵 Precio: $${Number(p.precio).toFixed(2)}\n🆔 ID: ${p.id || 'N/D'}\n\nMotivo del reporte: `;
+        const whatsappReporteLink = `https://wa.me/593992661432?text=${encodeURIComponent(textoReporte)}`;
+
         // Identificador único para favoritos y compartir
         const idUnico = p.id || p.nombre;
         
-        // Bloque de comentarios y opiniones integrado con estrellas interactivas adaptado para móviles
-        const opinionesHtml = `
-            <div class="mt-3 pt-2.5 border-t border-slate-100">
-                <div class="flex items-center justify-between text-[11px] mb-1">
-                    <span class="text-amber-400 font-bold">★★★★★ <span id="promedio-estrellas-${idUnico}" class="text-slate-600 font-normal">(Reseñas)</span></span>
-                    <button onclick="toggleComentarios('${idUnico}')" class="text-blue-600 font-semibold hover:underline cursor-pointer py-0.5 px-1">Ver / Opinar 💬</button>
-                </div>
-                <div id="box-comentarios-${idUnico}" class="hidden mt-2 space-y-2 bg-slate-50 p-2.5 rounded-xl text-left border border-slate-200">
-                    <div id="lista-comentarios-${idUnico}" class="max-h-28 overflow-y-auto space-y-1.5 text-[10px] text-slate-500 pr-1">
-                        <p class="italic text-slate-400">Cargando opiniones...</p>
-                    </div>
-                    <div class="space-y-2 pt-2 border-t border-slate-200">
-                        <!-- Selector de estrellas interactivo -->
-                        <div class="flex items-center gap-1.5 text-xs overflow-x-auto py-0.5">
-                            <span class="text-[10px] text-slate-500 mr-0.5 flex-shrink-0">Tu calificación:</span>
-                            <span id="star-${idUnico}-1" onclick="seleccionarEstrellas('${idUnico}', 1)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
-                            <span id="star-${idUnico}-2" onclick="seleccionarEstrellas('${idUnico}', 2)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
-                            <span id="star-${idUnico}-3" onclick="seleccionarEstrellas('${idUnico}', 3)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
-                            <span id="star-${idUnico}-4" onclick="seleccionarEstrellas('${idUnico}', 4)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
-                            <span id="star-${idUnico}-5" onclick="seleccionarEstrellas('${idUnico}', 5)" class="cursor-pointer text-amber-400 text-base px-0.5">★</span>
-                        </div>
-                        <input type="text" id="nombre-comentador-${idUnico}" placeholder="Tu nombre" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-blue-500">
-                        <input type="text" id="texto-comentario-${idUnico}" placeholder="Escribe tu opinión..." class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-blue-500">
-                        <button onclick="guardarComentarioFirebase('${idUnico}')" class="w-full bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs py-2 rounded-lg transition cursor-pointer shadow-xs">
-                            Enviar Opinión 💬
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-
         let card = '';
         if (modoVista === 'list') {
             // Diseño en Tarjeta de Lista Compacta optimizada para móvil
@@ -420,6 +406,7 @@ function renderizarProductos(productos) {
                             </div>
                         </div>
                         <div class="flex items-center justify-end sm:justify-center gap-2 w-full sm:w-auto mt-2 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex-shrink-0">
+                            <a href="${whatsappReporteLink}" target="_blank" class="w-9 h-9 sm:w-8 sm:h-8 bg-slate-100 hover:bg-amber-50 rounded-full flex items-center justify-center text-amber-600 transition" title="Reportar publicación">⚠️</a>
                             <button onclick="toggleFavorito('${idUnico}')" class="w-9 h-9 sm:w-8 sm:h-8 bg-slate-100 hover:bg-rose-50 rounded-full flex items-center justify-center text-rose-500 transition" title="Guardar en favoritos">❤️</button>
                             <button onclick="compartirAnuncio('${p.nombre}', '${p.precio}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2 sm:p-2 rounded-xl transition" title="Compartir enlace">🔗</button>
                             <a href="${whatsappLink}" target="_blank" class="${btnColor} text-white font-semibold text-xs py-2 px-3 rounded-xl transition duration-200 shadow-sm flex items-center justify-center gap-1.5 flex-grow sm:flex-grow-0 whitespace-nowrap">
@@ -427,7 +414,6 @@ function renderizarProductos(productos) {
                             </a>
                         </div>
                     </div>
-                    ${opinionesHtml}
                 </div>
             `;
         } else {
@@ -438,6 +424,11 @@ function renderizarProductos(productos) {
                         <img src="${p.imagen_url}" alt="${p.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&q=80&w=400'">
                         <span class="absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${badgeColor} bg-white/90 backdrop-blur-sm">${badgeText}</span>
                         
+                        <!-- Botón de Reportar (Alerta) -->
+                        <a href="${whatsappReporteLink}" target="_blank" class="absolute top-2 right-12 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-amber-600 shadow-sm hover:scale-110 transition" title="Reportar publicación">
+                            ⚠️
+                        </a>
+
                         <!-- Botón de Favorito (Corazón) -->
                         <button onclick="toggleFavorito('${idUnico}')" class="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-rose-500 shadow-sm hover:scale-110 transition" title="Guardar en favoritos">
                             ❤️
@@ -467,19 +458,14 @@ function renderizarProductos(productos) {
                                     </a>
                                 </div>
                             </div>
-                            ${opinionesHtml}
                         </div>
                     </div>
                 </div>
             `;
         }
         grid.innerHTML += card;
-        
-        // 👉 Aquí está la línea que actualiza el contador de estrellas al terminar de pintar cada tarjeta
-        actualizarContadorEstrellas(idUnico);
     });
 }
-
     
       function filtrarCategoria(cat, event) {
             categoriaActual = cat;
@@ -1059,236 +1045,6 @@ function saltarAFavoritoFirestore(id) {
 }
 
 
-
-
-// Abrir o cerrar el cajón de opiniones de un producto específico
-function toggleComentarios(idProducto) {
-    const box = document.getElementById(`box-comentarios-${idProducto}`);
-    if (box) {
-        box.classList.toggle('hidden');
-        if (!box.classList.contains('hidden')) {
-            cargarComentarios(idProducto);
-        }
-    }
-}
-
-function cargarComentarios(productId) {
-    const contenedor = document.getElementById(`lista-comentarios-${productId}`);
-    if (!contenedor) return;
-
-    // Usamos onSnapshot de la SDK clásica de Firebase con db.collection
-    db.collection("comentarios")
-      .where("productId", "==", String(productId))
-      .onSnapshot((snapshot) => {
-          let comentarios = [];
-          snapshot.forEach((doc) => {
-              comentarios.push({ id: doc.id, ...doc.data() });
-          });
-
-          // Ordenamos localmente del más nuevo al más antiguo para evitar índices
-          comentarios.sort((a, b) => {
-              const fechaA = a.fecha?.toMillis ? a.fecha.toMillis() : (new Date(a.fecha || 0).getTime());
-              const fechaB = b.fecha?.toMillis ? b.fecha.toMillis() : (new Date(b.fecha || 0).getTime());
-              return fechaB - fechaA;
-          });
-
-          if (comentarios.length === 0) {
-              contenedor.innerHTML = `<p class="italic text-slate-400">Sé el primero en dejar una opinión 💬</p>`;
-              return;
-          }
-
-          contenedor.innerHTML = '';
-          comentarios.forEach(c => {
-              let fechaFormateada = 'Reciente';
-              if (c.fecha) {
-                  const dateObj = c.fecha.toDate ? c.fecha.toDate() : new Date(c.fecha);
-                  fechaFormateada = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              }
-
-              const item = document.createElement('div');
-              item.className = "bg-white p-1.5 rounded-lg border border-slate-100 shadow-2xs mb-1";
-              item.innerHTML = `
-                  <div class="flex justify-between items-center text-[9px] text-slate-400 mb-0.5">
-                      <span class="font-bold text-slate-700">${escapeHtml(c.nombre || 'Anónimo')}</span>
-                      <span>${fechaFormateada}</span>
-                  </div>
-                  <p class="text-[10px] text-slate-600 break-words">${escapeHtml(c.texto || '')}</p>
-              `;
-              contenedor.appendChild(item);
-          });
-      }, (error) => {
-          console.error("Error cargando comentarios en tiempo real: ", error);
-          contenedor.innerHTML = `<p class="text-rose-500 italic">Error al sincronizar opiniones.</p>`;
-      });
-}
-
-function escapeHtml(text) {
-    if (!text) return '';
-    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
-
-// Variable temporal para guardar la estrella seleccionada en el formulario actual
-let calificacionSeleccionada = 5; // Por defecto 5 estrellas
-
-function seleccionarEstrellas(productId, rating) {
-    calificacionSeleccionada = rating;
-    // Actualizar visualmente las estrellas del formulario
-    for (let i = 1; i <= 5; i++) {
-        const star = document.getElementById(`star-${productId}-${i}`);
-        if (star) {
-            if (i <= rating) {
-                star.classList.add('text-amber-400');
-                star.classList.remove('text-slate-300');
-            } else {
-                star.classList.remove('text-amber-400');
-                star.classList.add('text-slate-300');
-            }
-        }
-    }
-}
-
-function cargarComentarios(productId) {
-    const contenedor = document.getElementById(`lista-comentarios-${productId}`);
-    if (!contenedor) return;
-
-    db.collection("comentarios")
-      .where("productId", "==", String(productId))
-      .onSnapshot((snapshot) => {
-          let comentarios = [];
-          snapshot.forEach((doc) => {
-              comentarios.push({ id: doc.id, ...doc.data() });
-          });
-
-          comentarios.sort((a, b) => {
-              const fechaA = a.fecha?.toMillis ? a.fecha.toMillis() : (new Date(a.fecha || 0).getTime());
-              const fechaB = b.fecha?.toMillis ? b.fecha.toMillis() : (new Date(b.fecha || 0).getTime());
-              return fechaB - fechaA;
-          });
-
-          // Calcular promedio de estrellas
-          let sumaEstrellas = 0;
-          comentarios.forEach(c => { sumaEstrellas += (Number(c.rating) || 5); });
-          let promedio = comentarios.length > 0 ? (sumaEstrellas / comentarios.length).toFixed(1) : "5.0";
-
-          // Actualizar el texto de reseñas en la tarjeta si existe el elemento
-          // (Busca el elemento de estrellas principal de la tarjeta para actualizar su promedio)
-          
-          if (comentarios.length === 0) {
-              contenedor.innerHTML = `<p class="italic text-slate-400 text-xs py-1">Sé el primero en dejar una opinión 💬</p>`;
-              return;
-          }
-
-          contenedor.innerHTML = '';
-          comentarios.forEach(c => {
-              let fechaFormateada = 'Reciente';
-              if (c.fecha) {
-                  const dateObj = c.fecha.toDate ? c.fecha.toDate() : new Date(c.fecha);
-                  fechaFormateada = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              }
-
-              // Generar estrellitas visuales para el comentario
-              let estrellasHtml = '';
-              let ratingVal = Number(c.rating) || 5;
-              for (let i = 1; i <= 5; i++) {
-                  estrellasHtml += `<span class="${i <= ratingVal ? 'text-amber-400' : 'text-slate-200'}">★</span>`;
-              }
-
-              const item = document.createElement('div');
-              item.className = "bg-white p-2 rounded-lg border border-slate-100 shadow-2xs mb-1.5";
-              item.innerHTML = `
-                  <div class="flex justify-between items-center text-[10px] text-slate-400 mb-0.5">
-                      <span class="font-bold text-slate-700">${escapeHtml(c.nombre || 'Anónimo')}</span>
-                      <div class="flex items-center gap-1">
-                          <span class="text-xs">${estrellasHtml}</span>
-                          <span>${fechaFormateada}</span>
-                      </div>
-                  </div>
-                  <p class="text-[11px] text-slate-600 break-words">${escapeHtml(c.texto || '')}</p>
-              `;
-              contenedor.appendChild(item);
-          });
-      }, (error) => {
-          console.error("Error cargando comentarios: ", error);
-      });
-}
-
-// Variable global temporal para la calificación que selecciona el usuario
-window.calificacionSeleccionada = 5;
-
-function seleccionarEstrellas(productId, rating) {
-    window.calificacionSeleccionada = rating;
-    for (let i = 1; i <= 5; i++) {
-        const star = document.getElementById(`star-${productId}-${i}`);
-        if (star) {
-            if (i <= rating) {
-                star.classList.add('text-amber-400');
-                star.classList.remove('text-slate-300', 'text-slate-200');
-            } else {
-                star.classList.remove('text-amber-400');
-                star.classList.add('text-slate-300');
-            }
-        }
-    }
-}
-
-function actualizarContadorEstrellas(productId) {
-    db.collection("comentarios")
-        .where("productId", "==", String(productId))
-        .get()
-        .then((snapshot) => {
-            let suma = 0;
-            let totalComentarios = snapshot.size;
-
-            if (totalComentarios === 0) return;
-
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                suma += (Number(data.rating) || 5);
-            });
-
-            const promedio = (suma / totalComentarios).toFixed(1);
-            
-            // Actualiza el texto con el promedio real y el total de opiniones
-            const spanReseñas = document.getElementById(`promedio-estrellas-${productId}`);
-            if (spanReseñas) {
-                spanReseñas.innerHTML = `<b class="text-slate-700">${promedio}</b> (${totalComentarios} ${totalComentarios === 1 ? 'opinión' : 'opiniones'})`;
-            }
-        })
-        .catch((error) => {
-            console.error("Error al calcular promedio:", error);
-        });
-}
-
-function guardarComentarioFirebase(productId) {
-    const inputNombre = document.getElementById(`nombre-comentador-${productId}`);
-    const inputTexto = document.getElementById(`texto-comentario-${productId}`);
-
-    const nombre = inputNombre ? inputNombre.value.trim() : '';
-    const texto = inputTexto ? inputTexto.value.trim() : '';
-
-    if (!nombre || !texto) {
-        alert("Por favor ingresa tu nombre y tu opinión.");
-        return;
-    }
-
-    db.collection("comentarios").add({
-        productId: String(productId),
-        nombre: nombre,
-        texto: texto,
-        rating: Number(window.calificacionSeleccionada || 5),
-        fecha: firebase.firestore.FieldValue.serverTimestamp()
-    })
-    .then(() => {
-        if (inputTexto) inputTexto.value = '';
-        if (inputNombre) inputNombre.value = '';
-        window.calificacionSeleccionada = 5; // Reiniciar
-        actualizarContadorEstrellas(productId); // Actualizar al instante
-    })
-    .catch((error) => {
-        console.error("Error al guardar comentario: ", error);
-        alert("Hubo un error al enviar tu opinión.");
-    });
-}
 
 
 // Lógica para el botón de instalación de la Web App
