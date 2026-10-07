@@ -795,12 +795,20 @@ function renderizarProductos(productos) {
             }
         }
 
-
-// --- NOTIFICADOR EN TIEMPO REAL (Independiente) ---
+// --- NOTIFICADOR EN TIEMPO REAL CORREGIDO ---
 let primerCargaNotif = true;
 let idsConocidosNotif = new Set();
 
 db.collection('productos').where('activo', '==', true).onSnapshot((snapshot) => {
+    // Si es la primera vez que carga, simplemente guardamos todos los IDs existentes y salimos
+    if (primerCargaNotif) {
+        snapshot.forEach(doc => {
+            idsConocidosNotif.add(doc.id);
+        });
+        primerCargaNotif = false;
+        return; // <--- AQUÍ ESTÁ EL SECRETO: Evita procesar los "added" iniciales como nuevos anuncios
+    }
+
     let nuevosRecientes = [];
 
     snapshot.docChanges().forEach((change) => {
@@ -808,20 +816,17 @@ db.collection('productos').where('activo', '==', true).onSnapshot((snapshot) => 
             let data = change.doc.data();
             let id = change.doc.id;
 
-            if (!primerCargaNotif && !idsConocidosNotif.has(id)) {
+            // Si ya pasó la primera carga y este ID NO lo conocíamos, es un producto 100% nuevo
+            if (!idsConocidosNotif.has(id)) {
                 nuevosRecientes.push({ id: id, ...data });
+                idsConocidosNotif.add(id); // Lo agregamos para no repetirlo
             }
-            idsConocidosNotif.add(id);
         }
     });
 
-    if (!primerCargaNotif && nuevosRecientes.length > 0) {
+    // Si hay elementos nuevos reales, lanzamos la notificación del primero en llegar
+    if (nuevosRecientes.length > 0) {
         mostrarNotificacionEstiloFacebook(nuevosRecientes[0]);
-    }
-
-    if (primerCargaNotif) {
-        snapshot.forEach(doc => idsConocidosNotif.add(doc.id));
-        primerCargaNotif = false;
     }
 });
 
