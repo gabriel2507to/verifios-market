@@ -1,6 +1,6 @@
 const CACHE_NAME = 'verifiosmarket-v1';
 const ASSETS = [
-  'index.html',
+  '/index.html',
   'manifest.json',
   'img/logo-app.png',
   'img/logo-app-512.png'
