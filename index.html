@@ -85,11 +85,13 @@
         
         <div class="relative z-10 flex flex-col items-start gap-4 w-full">
             
-            <!-- Contenedor superior con Botón de instalar y Tips de seguridad -->
-            <div class="flex flex-wrap items-center gap-2">
-                <button id="btnInstalarApp" style="display: none;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-full transition shadow-sm items-center gap-1.5">
-                    📲 Instalar VerifiOS Market.
-                </button>
+           <!-- Botón de Instalación PWA (Visible por defecto) -->
+<div class="flex justify-center flex-1">
+    <button id="btnInstalar" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1.5 whitespace-nowrap">
+        <span>📲</span> Instalar VerifiOS Market
+    </button>
+
+
 
                 <!-- Botón desplegable alineado para que no se salga de la pantalla -->
                 <details class="relative group">
@@ -1086,38 +1088,49 @@ function saltarAFavoritoFirestore(id) {
 
 
 
+// Inicializamos la propiedad global de la PWA
+window.deferredPrompt = null;
 
-// Lógica para el botón de instalación de la Web App
-let deferredPrompt;
-const btnInstalar = document.getElementById('btnInstalarApp');
-
+// Capturamos el evento de instalación
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Previene que el navegador muestre su banner automático por defecto
     e.preventDefault();
-    deferredPrompt = e;
-    
-    // Muestra nuestro botón personalizado en la barra de navegación
+    window.deferredPrompt = e;
+});
+
+// Acción al hacer clic en el botón siempre visible
+const btnInstalar = document.getElementById('btnInstalar');
+if (btnInstalar) {
+    btnInstalar.addEventListener('click', async () => {
+        // Si el navegador ya tiene el evento listo, lanzamos el aviso nativo
+        if (window.deferredPrompt) {
+            window.deferredPrompt.prompt();
+            const { outcome } = await window.deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('¡El usuario aceptó instalar VerifiOS Market!');
+            }
+            window.deferredPrompt = null;
+        } else {
+            // Mensaje de guía por si el navegador o modo no lo dispara automáticamente
+            alert("Para instalar VerifiOS Market, abre el menú de opciones de tu navegador (los tres puntitos ⠇) y selecciona 'Instalar aplicación' o 'Añadir a la pantalla principal'.");
+        }
+    });
+}
+
+// Ocultar el botón automáticamente cuando la PWA ya se haya instalado con éxito
+window.addEventListener('appinstalled', () => {
     if (btnInstalar) {
-        btnInstalar.style.display = 'inline-flex';
+        btnInstalar.classList.add('hidden');
+    }
+    console.log('VerifiOS Market PWA fue instalada con éxito.');
+});
+
+// Validar al cargar la página si la app ya está abierta en modo independiente en el celular
+document.addEventListener("DOMContentLoaded", () => {
+    if (btnInstalar && window.matchMedia('(display-mode: standalone)').matches) {
+        btnInstalar.classList.add('hidden');
     }
 });
 
-if (btnInstalar) {
-    btnInstalar.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-        
-        // Muestra el aviso nativo de instalación
-        deferredPrompt.prompt();
-        
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-            console.log('El usuario instaló la Web App');
-        }
-        
-        deferredPrompt = null;
-        btnInstalar.style.display = 'none';
-    });
-}
 
 // Registrar el Service Worker para habilitar la PWA
 if ('serviceWorker' in navigator) {
