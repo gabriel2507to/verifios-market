@@ -56,19 +56,21 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-2.5 w-full sm:w-auto">
-                <div class="relative w-full sm:w-72">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
-                    <input type="text" id="buscador" placeholder="Buscar productos o servicios..." class="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-100/70 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
-                </div>
-                <a href="publicar.html" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm shadow-blue-500/20 whitespace-nowrap flex items-center gap-1.5">
-                    <span>+</span> Publicar Gratis 📝
-                </a>
-                <!-- NUEVO: Botón para ir al formulario de Se Busca -->
-    <a href="solicitud.html" class="bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-semibold px-3 py-2 rounded-xl transition shadow-sm whitespace-nowrap flex items-center gap-1">
-        <span>🔍</span> Se Busca/Necesita.
-    </a>
-            </div>
+          <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+    <div class="relative w-full sm:w-72">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
+        <input type="text" id="buscador" placeholder="Buscar productos o servicios..." class="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-100/70 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+    </div>
+    <div class="flex items-center gap-2 w-full sm:w-auto">
+        <a href="publicar.html" target="_blank" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-sm shadow-blue-500/20 whitespace-nowrap flex items-center justify-center gap-1.5">
+            <span>+</span> Publicar Gratis 📝
+        </a>
+        <!-- NUEVO: Botón para ir al formulario de Se Busca -->
+        <a href="solicitud.html" class="flex-1 sm:flex-none bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-semibold px-3 py-2 rounded-xl transition shadow-sm whitespace-nowrap flex items-center justify-center gap-1">
+            <span>🔍</span> Se Busca/Necesita.
+        </a>
+    </div>
+</div>
         </div>
     </header>
 
@@ -85,7 +87,7 @@
             
             <!-- Contenedor superior con Botón de instalar y Tips de seguridad -->
             <div class="flex flex-wrap items-center gap-2">
-                <button id="btnInstalarApp" style="display: display;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-full transition shadow-sm items-center gap-1.5">
+                <button id="btnInstalarApp" style="display: none;" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-2 rounded-full transition shadow-sm items-center gap-1.5">
                     📲 Instalar VerifiOS Market.
                 </button>
 
